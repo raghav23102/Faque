@@ -10,7 +10,7 @@
   },
   "rewrites": [
     {
-      "source": "/((?!favicon|assets|public).*)",
+      "source": "/((?!.*\\.(?:css|js|map|png|jpg|jpeg|gif|svg|ico|json|woff2?)).*)",
       "destination": "/api/index"
     }
   ]
