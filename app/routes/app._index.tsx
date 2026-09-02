@@ -23,22 +23,45 @@ export const headers: HeadersFunction = (headersArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { session } = await authenticate.admin(request);
-  const [faqs, subscription] = await Promise.all([
-    prisma.fAQ.findMany({
-      where: { shop: session.shop },
-      include: { _count: { select: { questions: true } } },
-      orderBy: { updatedAt: "desc" },
-    }),
-    getSubscription(session.shop),
-  ]);
+  let session;
+  try {
+    const authResult = await authenticate.admin(request);
+    session = authResult.session;
+  } catch (error: any) {
+    if (error instanceof Response || error?.status || error?.headers) {
+      throw error;
+    }
+    console.error("app._index authenticate error:", error);
+    throw error;
+  }
 
-  const totalQuestions = faqs.reduce(
-    (acc, faq) => acc + faq._count.questions,
-    0
-  );
+  const shopDomain = session?.shop || "";
 
-  return { faqs, totalQuestions, subscription, shop: session.shop };
+  try {
+    const [faqs, subscription] = await Promise.all([
+      prisma.fAQ.findMany({
+        where: { shop: shopDomain },
+        include: { _count: { select: { questions: true } } },
+        orderBy: { updatedAt: "desc" },
+      }),
+      getSubscription(shopDomain),
+    ]);
+
+    const totalQuestions = faqs.reduce(
+      (acc, faq) => acc + faq._count.questions,
+      0
+    );
+
+    return { faqs, totalQuestions, subscription, shop: shopDomain };
+  } catch (dbError) {
+    console.error("app._index database error:", dbError);
+    return {
+      faqs: [],
+      totalQuestions: 0,
+      subscription: { plan: "Free" },
+      shop: shopDomain,
+    };
+  }
 };
 
 export default function Dashboard() {
