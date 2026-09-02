@@ -1,0 +1,174 @@
+/* ===== FAQUE - All 15 FAQ Designs ===== */
+
+/* ---- Shared base ---- */
+.faque-container { font-family: inherit; box-sizing: border-box; }
+.faque-container *, .faque-container *::before, .faque-container *::after { box-sizing: border-box; }
+.faque-heading { margin: 0 0 24px; font-size: 1.75rem; font-weight: 700; }
+.faque-powered { margin-top: 20px; text-align: center; font-size: 11px; opacity: 0.4; }
+
+/* ============================================================
+   DESIGN 01 — Minimal Accordion
+   ============================================================ */
+.faque-d01 .faque-item { border: none; border-bottom: 1px solid #e5e7eb; border-radius: 0; margin-bottom: 0; }
+.faque-d01 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d01 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d01 .faque-item summary::after { content: '+'; font-size: 1.25rem; color: #9ca3af; transition: transform 0.2s; }
+.faque-d01 .faque-item[open] summary::after { content: '−'; }
+.faque-d01 .faque-answer { padding: 0 0 16px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 02 — Modern Cards
+   ============================================================ */
+.faque-d02 .faque-item { border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; overflow: hidden; transition: box-shadow 0.2s; }
+.faque-d02 .faque-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+.faque-d02 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; cursor: pointer; font-weight: 600; list-style: none; background: white; }
+.faque-d02 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d02 .faque-item summary::after { content: '▾'; font-size: 0.9rem; color: #6b7280; transition: transform 0.25s; }
+.faque-d02 .faque-item[open] summary::after { transform: rotate(-180deg); }
+.faque-d02 .faque-answer { padding: 0 20px 18px; border-top: 1px solid #f3f4f6; color: #6b7280; line-height: 1.6; padding-top: 14px; }
+
+/* ============================================================
+   DESIGN 03 — Two Column
+   ============================================================ */
+.faque-d03 .faque-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width: 640px) { .faque-d03 .faque-grid { grid-template-columns: 1fr; } }
+.faque-d03 .faque-item { border-left: 3px solid #5c6ac4; padding-left: 16px; margin-bottom: 12px; }
+.faque-d03 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d03 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d03 .faque-answer { padding: 8px 0 0; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 04 — Editorial
+   ============================================================ */
+.faque-d04 .faque-item { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid #e5e7eb; }
+.faque-d04 .faque-item-num { font-size: 0.8rem; font-weight: 700; color: #5c6ac4; min-width: 28px; padding-top: 3px; }
+.faque-d04 .faque-item-body details summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; list-style: none; }
+.faque-d04 .faque-item-body details summary::-webkit-details-marker { display: none; }
+.faque-d04 .faque-answer { margin-top: 12px; color: #6b7280; line-height: 1.7; }
+
+/* ============================================================
+   DESIGN 05 — Category Tabs
+   ============================================================ */
+.faque-d05 .faque-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.faque-d05 .faque-tab-btn { padding: 6px 18px; border-radius: 20px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+.faque-d05 .faque-tab-btn.active { background: #5c6ac4; color: white; border-color: #5c6ac4; }
+.faque-d05 .faque-item { border-bottom: 1px solid #e5e7eb; display: none; }
+.faque-d05 .faque-item.visible { display: block; }
+.faque-d05 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d05 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d05 .faque-answer { padding: 0 0 14px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 06 — Sidebar FAQ
+   ============================================================ */
+.faque-d06 .faque-layout { display: grid; grid-template-columns: 200px 1fr; gap: 24px; }
+@media(max-width: 640px) { .faque-d06 .faque-layout { grid-template-columns: 1fr; } .faque-d06 .faque-sidebar { display: none; } }
+.faque-d06 .faque-sidebar { background: #f9fafb; border-radius: 10px; padding: 16px; }
+.faque-d06 .faque-cat-btn { display: block; width: 100%; text-align: left; padding: 10px 14px; border-radius: 8px; border: none; background: transparent; cursor: pointer; font-size: 0.9rem; margin-bottom: 4px; transition: background 0.2s; }
+.faque-d06 .faque-cat-btn.active { background: #5c6ac4; color: white; font-weight: 600; }
+.faque-d06 .faque-item { border-bottom: 1px solid #e5e7eb; }
+.faque-d06 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d06 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d06 .faque-answer { padding: 0 0 14px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 07 — Search FAQ
+   ============================================================ */
+.faque-d07 .faque-search-wrap { position: relative; margin-bottom: 24px; }
+.faque-d07 .faque-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 1rem; }
+.faque-d07 .faque-search { width: 100%; padding: 12px 16px 12px 42px; border: 2px solid #5c6ac4; border-radius: 10px; font-size: 1rem; outline: none; }
+.faque-d07 .faque-item { border-bottom: 1px solid #e5e7eb; }
+.faque-d07 .faque-item.hidden { display: none; }
+.faque-d07 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d07 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d07 .faque-answer { padding: 0 0 14px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 08 — Image + FAQ
+   ============================================================ */
+.faque-d08 .faque-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 32px; align-items: start; }
+@media(max-width: 640px) { .faque-d08 .faque-layout { grid-template-columns: 1fr; } .faque-d08 .faque-img-wrap { display: none; } }
+.faque-d08 .faque-img-wrap { border-radius: 14px; overflow: hidden; background: linear-gradient(135deg, #667eea, #764ba2); min-height: 300px; }
+.faque-d08 .faque-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.faque-d08 .faque-item { border-bottom: 1px solid #e5e7eb; }
+.faque-d08 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d08 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d08 .faque-answer { padding: 0 0 14px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 09 — Centered Premium
+   ============================================================ */
+.faque-d09 { text-align: center; }
+.faque-d09 .faque-heading { text-align: center; }
+.faque-d09 .faque-subtitle { text-align: center; color: #6b7280; margin-bottom: 32px; }
+.faque-d09 .faque-item { border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; overflow: hidden; text-align: left; }
+.faque-d09 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 18px 22px; cursor: pointer; font-weight: 600; list-style: none; }
+.faque-d09 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d09 .faque-item summary::after { content: '+'; font-size: 1.2rem; color: #5c6ac4; }
+.faque-d09 .faque-item[open] summary::after { content: '−'; }
+.faque-d09 .faque-answer { padding: 0 22px 18px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 10 — Dark FAQ
+   ============================================================ */
+.faque-d10 { background: #1a1a2e; padding: 40px; border-radius: 16px; }
+.faque-d10 .faque-heading { color: white; }
+.faque-d10 .faque-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+.faque-d10 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; cursor: pointer; font-weight: 600; color: #e0e0e0; list-style: none; }
+.faque-d10 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d10 .faque-item summary::after { content: '+'; font-size: 1.2rem; color: #00d4ff; }
+.faque-d10 .faque-item[open] summary::after { content: '−'; }
+.faque-d10 .faque-answer { padding: 0 0 16px; color: #9ca3af; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 11 — Highlighted Question
+   ============================================================ */
+.faque-d11 .faque-item { display: flex; gap: 16px; align-items: flex-start; padding: 16px; border-radius: 10px; margin-bottom: 8px; transition: background 0.2s; }
+.faque-d11 .faque-item:hover { background: linear-gradient(to right, #e8f0ff, transparent); }
+.faque-d11 .faque-item-icon { width: 32px; height: 32px; border-radius: 50%; background: #5c6ac4; color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+.faque-d11 .faque-item details summary { cursor: pointer; font-weight: 700; list-style: none; padding: 4px 0; }
+.faque-d11 .faque-item details summary::-webkit-details-marker { display: none; }
+.faque-d11 .faque-answer { margin-top: 8px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 12 — Borderless FAQ
+   ============================================================ */
+.faque-d12 .faque-item { padding: 16px 0; border: none; }
+.faque-d12 .faque-item summary { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; font-size: 1.05rem; list-style: none; }
+.faque-d12 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d12 .faque-item summary::after { content: '↓'; font-size: 1rem; color: #9ca3af; transition: transform 0.2s; }
+.faque-d12 .faque-item[open] summary::after { transform: rotate(180deg); }
+.faque-d12 .faque-answer { padding-top: 10px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 13 — Split FAQ
+   ============================================================ */
+.faque-d13 .faque-layout { display: grid; grid-template-columns: 260px 1fr; gap: 0; border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; }
+@media(max-width: 640px) { .faque-d13 .faque-layout { grid-template-columns: 1fr; } .faque-d13 .faque-answer-panel { border-left: none; border-top: 1px solid #e5e7eb; } }
+.faque-d13 .faque-questions-list { border-right: 1px solid #e5e7eb; }
+.faque-d13 .faque-q-btn { display: block; width: 100%; text-align: left; padding: 16px 20px; border: none; border-bottom: 1px solid #f3f4f6; background: white; cursor: pointer; font-weight: 500; transition: background 0.2s; }
+.faque-d13 .faque-q-btn.active { background: #5c6ac4; color: white; font-weight: 600; }
+.faque-d13 .faque-answer-panel { padding: 28px; background: #fafafa; }
+.faque-d13 .faque-answer-panel h3 { font-size: 1.1rem; margin-bottom: 12px; }
+.faque-d13 .faque-answer-panel p { color: #6b7280; line-height: 1.7; }
+
+/* ============================================================
+   DESIGN 14 — Timeline FAQ
+   ============================================================ */
+.faque-d14 .faque-timeline { position: relative; padding-left: 36px; }
+.faque-d14 .faque-timeline::before { content: ''; position: absolute; left: 9px; top: 0; bottom: 0; width: 2px; background: #e5e7eb; }
+.faque-d14 .faque-item { position: relative; margin-bottom: 24px; }
+.faque-d14 .faque-item::before { content: ''; position: absolute; left: -31px; top: 10px; width: 12px; height: 12px; border-radius: 50%; background: #008060; border: 3px solid white; box-shadow: 0 0 0 2px #008060; }
+.faque-d14 .faque-item details summary { cursor: pointer; font-weight: 700; list-style: none; padding: 6px 0; }
+.faque-d14 .faque-item details summary::-webkit-details-marker { display: none; }
+.faque-d14 .faque-answer { margin-top: 8px; color: #6b7280; line-height: 1.6; }
+
+/* ============================================================
+   DESIGN 15 — Compact FAQ
+   ============================================================ */
+.faque-d15 .faque-item { border-bottom: 1px solid #f3f4f6; }
+.faque-d15 .faque-item summary { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; font-size: 0.9rem; font-weight: 600; list-style: none; }
+.faque-d15 .faque-item summary::-webkit-details-marker { display: none; }
+.faque-d15 .faque-item summary::after { content: '+'; font-size: 1rem; color: #9ca3af; }
+.faque-d15 .faque-item[open] summary::after { content: '−'; }
+.faque-d15 .faque-answer { padding: 0 0 10px; color: #6b7280; font-size: 0.9rem; line-height: 1.5; }
