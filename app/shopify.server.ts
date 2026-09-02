@@ -15,16 +15,13 @@ if (!process.env.SHOPIFY_APP_URL || !process.env.SHOPIFY_APP_URL.trim()) {
 if (!process.env.SHOPIFY_API_KEY || !process.env.SHOPIFY_API_KEY.trim()) {
   process.env.SHOPIFY_API_KEY = "dafbfec9f51776f79863a71093d0538a";
 }
-if (!process.env.SHOPIFY_API_SECRET || !process.env.SHOPIFY_API_SECRET.trim()) {
-  process.env.SHOPIFY_API_SECRET = ["shpss_", "703b9f1bbcba848cc063d64966f8e058"].join("");
-}
 if (!process.env.SCOPES || !process.env.SCOPES.trim()) {
   process.env.SCOPES = "write_products,write_metaobjects,write_metaobject_definitions";
 }
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
-  apiSecretKey: process.env.SHOPIFY_API_SECRET,
+  apiSecretKey: process.env.SHOPIFY_API_SECRET || "",
   apiVersion: ApiVersion.July26,
   scopes: process.env.SCOPES.split(","),
   appUrl: process.env.SHOPIFY_APP_URL,
