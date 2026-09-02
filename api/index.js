@@ -9,11 +9,6 @@ export default async function handler(req, res) {
       requestHandler = createRequestHandler(build);
     }
 
-    // Handle Web Request format if Vercel Edge / Web API environment
-    if (typeof req.get === "undefined" && req instanceof Request) {
-      return requestHandler(req);
-    }
-
     // Convert Node.js IncomingMessage (req) to Web API Request
     const protocol = req.headers["x-forwarded-proto"] || "https";
     const host = req.headers["x-forwarded-host"] || req.headers.host || "localhost";
@@ -46,24 +41,23 @@ export default async function handler(req, res) {
     const webRequest = new Request(url.href, init);
     const webResponse = await requestHandler(webRequest);
 
-    // Send Web API Response back to Vercel Node res
+    // Send Status and Headers back to Node res
     res.statusCode = webResponse.status;
     webResponse.headers.forEach((val, key) => {
       res.setHeader(key, val);
     });
 
-    if (webResponse.body) {
-      const arrayBuffer = await webResponse.arrayBuffer();
-      res.end(Buffer.from(arrayBuffer));
-    } else {
-      res.end();
-    }
+    // Safely send body text/data without arrayBuffer null crashes
+    const responseText = await webResponse.text();
+    res.end(responseText);
   } catch (error) {
     console.error("Vercel Function Error Details:", error);
     res.statusCode = 500;
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.end(`
+      <!DOCTYPE html>
       <html>
+        <head><title>500 Internal Server Error</title></head>
         <body style="font-family: system-ui, sans-serif; padding: 40px; background: #0f172a; color: #f8fafc;">
           <h2>Serverless Function Diagnostic Log</h2>
           <p style="color: #ef4444; font-weight: bold;">Error: ${error.message}</p>

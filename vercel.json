@@ -2,6 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
+  "outputDirectory": "build/client",
   "functions": {
     "api/**/*.js": {
       "includeFiles": "build/server/**, prisma/**, node_modules/.prisma/client/**, node_modules/@prisma/client/**"
@@ -9,11 +10,7 @@
   },
   "rewrites": [
     {
-      "source": "/assets/(.*)",
-      "destination": "/build/client/assets/$1"
-    },
-    {
-      "source": "/(.*)",
+      "source": "/((?!favicon|assets|public).*)",
       "destination": "/api/index"
     }
   ]
