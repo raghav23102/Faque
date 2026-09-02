@@ -19,235 +19,126 @@ export default function LandingPage() {
     <div
       style={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #0b0f19 0%, #111827 50%, #0f172a 100%)",
+        background: "#0f172a",
         color: "#f8fafc",
         fontFamily:
           "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         display: "flex",
-        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        padding: "40px 20px",
+        padding: "20px",
         boxSizing: "border-box",
       }}
     >
-      {/* Container */}
+      {/* Single Decent Static Card Section */}
       <div
         style={{
-          maxWidth: "800px",
+          maxWidth: "440px",
           width: "100%",
+          background: "#1e293b",
+          border: "1px solid rgba(255, 255, 255, 0.1)",
+          borderRadius: "20px",
+          padding: "40px 32px",
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          gap: "32px",
+          gap: "24px",
           textAlign: "center",
         }}
       >
         {/* Logo */}
         <div
           style={{
-            position: "relative",
-            width: "120px",
-            height: "120px",
-            borderRadius: "24px",
+            width: "90px",
+            height: "90px",
+            borderRadius: "18px",
             overflow: "hidden",
-            boxShadow:
-              "0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(92, 106, 196, 0.4)",
-            border: "2px solid rgba(255, 255, 255, 0.15)",
+            boxShadow: "0 10px 25px rgba(0, 0, 0, 0.3)",
+            border: "2px solid rgba(255, 255, 255, 0.12)",
           }}
         >
           <img
             src="/faque-logo-1200x1200.jpg"
-            alt="Faque App Logo"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
+            alt="Faque Logo"
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </div>
 
-        {/* Hero Title */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-          <div
-            style={{
-              display: "inline-block",
-              padding: "6px 16px",
-              borderRadius: "20px",
-              background: "rgba(92, 106, 196, 0.15)",
-              border: "1px solid rgba(92, 106, 196, 0.3)",
-              fontSize: "13px",
-              fontWeight: "600",
-              color: "#a5b4fc",
-              letterSpacing: "0.5px",
-              margin: "0 auto",
-            }}
-          >
-            ✦ SHOPIFY FAQ BUILDER
-          </div>
-          <h1
-            style={{
-              fontSize: "3rem",
-              fontWeight: "800",
-              margin: 0,
-              lineHeight: "1.15",
-              background: "linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            Beautiful FAQs. Zero Coding.
+        {/* Heading */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+          <h1 style={{ margin: 0, fontSize: "1.75rem", fontWeight: "800", color: "#ffffff" }}>
+            Faque
           </h1>
-          <p
-            style={{
-              fontSize: "1.15rem",
-              color: "#94a3b8",
-              maxWidth: "600px",
-              margin: "0 auto",
-              lineHeight: "1.6",
-            }}
-          >
-            Build stunning, conversion-focused FAQ sections for your Shopify store.
-            Choose from 15 curated designs and customize in seconds.
+          <p style={{ margin: 0, fontSize: "14px", color: "#94a3b8", lineHeight: "1.5" }}>
+            Beautiful FAQ sections for your Shopify store. Zero coding required.
           </p>
         </div>
 
-        {/* Login Form Card */}
+        {/* Login Form */}
         {showForm && (
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "480px",
-              background: "rgba(30, 41, 59, 0.7)",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
-              borderRadius: "20px",
-              padding: "32px",
-              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <Form method="post" action="/auth/login">
-              <div
+          <Form method="post" action="/auth/login" style={{ width: "100%" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", textAlign: "left" }}>
+              <label style={{ fontSize: "13px", fontWeight: "600", color: "#cbd5e1" }}>
+                Store Domain
+              </label>
+              <input
+                type="text"
+                name="shop"
+                placeholder="my-store.myshopify.com"
+                required
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "16px",
-                  textAlign: "left",
+                  width: "100%",
+                  padding: "12px 16px",
+                  borderRadius: "10px",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
+                  background: "#0f172a",
+                  color: "#ffffff",
+                  fontSize: "14px",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  borderRadius: "10px",
+                  border: "none",
+                  background: "#5c6ac4",
+                  color: "#ffffff",
+                  fontSize: "15px",
+                  fontWeight: "700",
+                  cursor: "pointer",
+                  marginTop: "4px",
+                  transition: "background 0.2s",
                 }}
               >
-                <label
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "600",
-                    color: "#e2e8f0",
-                  }}
-                >
-                  Enter your Shopify store domain
-                </label>
-                <input
-                  type="text"
-                  name="shop"
-                  placeholder="my-store.myshopify.com"
-                  required
-                  style={{
-                    width: "100%",
-                    padding: "14px 18px",
-                    borderRadius: "10px",
-                    border: "1px solid rgba(255, 255, 255, 0.15)",
-                    background: "rgba(15, 23, 42, 0.8)",
-                    color: "white",
-                    fontSize: "15px",
-                    outline: "none",
-                    boxSizing: "border-box",
-                  }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    width: "100%",
-                    padding: "14px",
-                    borderRadius: "10px",
-                    border: "none",
-                    background:
-                      "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
-                    color: "white",
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    cursor: "pointer",
-                    boxShadow: "0 4px 14px rgba(99, 102, 241, 0.4)",
-                    transition: "transform 0.15s, box-shadow 0.15s",
-                  }}
-                >
-                  Install or Log in to Store →
-                </button>
-              </div>
-            </Form>
-          </div>
+                Log in / Install App →
+              </button>
+            </div>
+          </Form>
         )}
 
-        {/* Feature Cards Grid */}
+        {/* Static Feature Highlights */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: "16px",
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+            paddingTop: "16px",
             width: "100%",
-            marginTop: "16px",
+            display: "flex",
+            justify: "center",
+            gap: "12px",
+            fontSize: "12px",
+            color: "#64748b",
           }}
         >
-          <div
-            style={{
-              background: "rgba(30, 41, 59, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "14px",
-              padding: "20px",
-              textAlign: "left",
-            }}
-          >
-            <div style={{ fontSize: "24px", marginBottom: "8px" }}>🎨</div>
-            <h3 style={{ margin: "0 0 6px", fontSize: "16px", fontWeight: "700" }}>
-              15 Premium Designs
-            </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8", lineHeight: "1.5" }}>
-              Accordions, Modern Cards, Dark Mode, Sidebar, Search, and Timeline layouts.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "rgba(30, 41, 59, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "14px",
-              padding: "20px",
-              textAlign: "left",
-            }}
-          >
-            <div style={{ fontSize: "24px", marginBottom: "8px" }}>⚡</div>
-            <h3 style={{ margin: "0 0 6px", fontSize: "16px", fontWeight: "700" }}>
-              Instant Integration
-            </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8", lineHeight: "1.5" }}>
-              Add directly from Shopify Theme Editor with a single click. Zero liquid code.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "rgba(30, 41, 59, 0.4)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "14px",
-              padding: "20px",
-              textAlign: "left",
-            }}
-          >
-            <div style={{ fontSize: "24px", marginBottom: "8px" }}>📱</div>
-            <h3 style={{ margin: "0 0 6px", fontSize: "16px", fontWeight: "700" }}>
-              100% Responsive
-            </h3>
-            <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8", lineHeight: "1.5" }}>
-              Looks stunning on Desktop, Tablet, and Mobile screens automatically.
-            </p>
-          </div>
+          <span>🎨 15 Designs</span>
+          <span>•</span>
+          <span>⚡ Theme Extension</span>
+          <span>•</span>
+          <span>📱 Mobile Ready</span>
         </div>
       </div>
     </div>
