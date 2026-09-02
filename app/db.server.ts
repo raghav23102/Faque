@@ -1,8 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-// Support both MONGODB_URI and DATABASE_URL
-if (!process.env.DATABASE_URL && process.env.MONGODB_URI) {
-  process.env.DATABASE_URL = process.env.MONGODB_URI;
+let dbUrl = process.env.DATABASE_URL || process.env.MONGODB_URI || "";
+
+if (dbUrl && dbUrl.startsWith("mongodb")) {
+  if (!dbUrl.includes("connectTimeoutMS")) {
+    const separator = dbUrl.includes("?") ? "&" : "?";
+    dbUrl += `${separator}connectTimeoutMS=5000&serverSelectionTimeoutMS=5000`;
+  }
+  process.env.DATABASE_URL = dbUrl;
 }
 
 declare global {
