@@ -14,8 +14,13 @@ import {
 import { authenticate } from "../shopify.server";
 import { useLoaderData, useNavigate } from "react-router";
 import prisma from "../db.server";
-import { LoaderFunctionArgs } from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
 import { getSubscription } from "../models/Subscription.server";
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
 import { DESIGN_REGISTRY } from "../designs/registry";
 import { useState, useCallback } from "react";
 

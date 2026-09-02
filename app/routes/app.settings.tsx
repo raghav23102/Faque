@@ -14,9 +14,14 @@ import {
   ChoiceList,
 } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
-import { LoaderFunctionArgs } from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
 import { useLoaderData } from "react-router";
 import { useState, useCallback } from "react";
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
 import { getSubscription } from "../models/Subscription.server";
 import prisma from "../db.server";
 

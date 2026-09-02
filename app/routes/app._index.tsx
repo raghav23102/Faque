@@ -13,9 +13,14 @@ import {
 import { authenticate } from "../shopify.server";
 import { useLoaderData, useNavigate } from "react-router";
 import prisma from "../db.server";
-import { LoaderFunctionArgs } from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
 import { getSubscription } from "../models/Subscription.server";
 import { DESIGN_REGISTRY } from "../designs/registry";
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);

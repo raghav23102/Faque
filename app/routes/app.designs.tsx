@@ -11,7 +11,12 @@ import { DESIGN_REGISTRY, canAccessDesign } from "../designs/registry";
 import { useLoaderData, useNavigate } from "react-router";
 import { authenticate } from "../shopify.server";
 import { getSubscription } from "../models/Subscription.server";
-import { LoaderFunctionArgs } from "react-router";
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
