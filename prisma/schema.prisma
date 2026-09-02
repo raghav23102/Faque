@@ -7,12 +7,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.sqlite"
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model Session {
-  id            String    @id
+  id            String    @id @map("_id")
   shop          String
   state         String
   isOnline      Boolean   @default(false)
@@ -32,7 +32,7 @@ model Session {
 }
 
 model FAQ {
-  id          String     @id @default(uuid())
+  id          String     @id @default(uuid()) @map("_id")
   shop        String
   name        String
   heading     String
@@ -45,7 +45,7 @@ model FAQ {
 }
 
 model Question {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id")
   faqId     String
   faq       FAQ      @relation(fields: [faqId], references: [id], onDelete: Cascade)
   question  String
@@ -56,7 +56,7 @@ model Question {
 }
 
 model Subscription {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id")
   shop      String   @unique
   plan      String   // FREE, SIMPLE, PRO, ULTIMATE
   createdAt DateTime   @default(now())
