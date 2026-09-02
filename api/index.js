@@ -44,11 +44,15 @@ export default async function handler(req, res) {
 
     // Send Status and Headers back to Node res
     res.statusCode = webResponse.status;
-    webResponse.headers.forEach((val, key) => {
-      res.setHeader(key, val);
-    });
+    for (const [key, val] of webResponse.headers.entries()) {
+      if (key.toLowerCase() === "set-cookie" && typeof webResponse.headers.getSetCookie === "function") {
+        res.setHeader(key, webResponse.headers.getSetCookie());
+      } else {
+        res.setHeader(key, val);
+      }
+    }
 
-    // Safely send body text/data without arrayBuffer null crashes
+    // Safely send body text/data
     const responseText = await webResponse.text();
     res.end(responseText);
   } catch (error) {
