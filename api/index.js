@@ -9,7 +9,7 @@ export default async function handler(req, res) {
       requestHandler = createRequestHandler(build);
     }
 
-    // If req is already a Web Request (Vercel Edge/Web API environment)
+    // Handle Web Request format if Vercel Edge / Web API environment
     if (typeof req.get === "undefined" && req instanceof Request) {
       return requestHandler(req);
     }
@@ -59,9 +59,17 @@ export default async function handler(req, res) {
       res.end();
     }
   } catch (error) {
-    console.error("Vercel Function Error:", error);
+    console.error("Vercel Function Error Details:", error);
     res.statusCode = 500;
-    res.setHeader("Content-Type", "text/plain");
-    res.end(`Internal Server Error: ${error.message}`);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.end(`
+      <html>
+        <body style="font-family: system-ui, sans-serif; padding: 40px; background: #0f172a; color: #f8fafc;">
+          <h2>Serverless Function Diagnostic Log</h2>
+          <p style="color: #ef4444; font-weight: bold;">Error: ${error.message}</p>
+          <pre style="background: #1e293b; padding: 20px; border-radius: 8px; overflow-x: auto; color: #94a3b8;">${error.stack}</pre>
+        </body>
+      </html>
+    `);
   }
 }
