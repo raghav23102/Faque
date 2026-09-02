@@ -13,22 +13,36 @@ export const PLAN_LIMITS = {
 };
 
 export async function getSubscription(shop: string) {
-  const sub = await prisma.subscription.findUnique({
-    where: { shop },
-  });
+  try {
+    const sub = await prisma.subscription.findFirst({
+      where: { shop },
+    });
 
-  if (!sub) {
-    // Default to Free plan if none exists
+    if (!sub) {
+      return { plan: PLAN_FREE };
+    }
+
+    return sub;
+  } catch (err) {
+    console.error("getSubscription error:", err);
     return { plan: PLAN_FREE };
   }
-
-  return sub;
 }
 
 export async function updateSubscription(shop: string, plan: string) {
-  return prisma.subscription.upsert({
-    where: { shop },
-    update: { plan },
-    create: { shop, plan },
-  });
+  try {
+    const existing = await prisma.subscription.findFirst({ where: { shop } });
+    if (existing) {
+      return await prisma.subscription.update({
+        where: { id: existing.id },
+        data: { plan },
+      });
+    }
+    return await prisma.subscription.create({
+      data: { shop, plan },
+    });
+  } catch (err) {
+    console.error("updateSubscription error:", err);
+    throw err;
+  }
 }

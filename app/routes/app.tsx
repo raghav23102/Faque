@@ -10,8 +10,16 @@ import { authenticate } from "../shopify.server";
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
-  return { apiKey: process.env.SHOPIFY_API_KEY || "dafbfec9f51776f79863a71093d0538a" };
+  try {
+    await authenticate.admin(request);
+    return { apiKey: process.env.SHOPIFY_API_KEY || "dafbfec9f51776f79863a71093d0538a" };
+  } catch (error: any) {
+    if (error instanceof Response || error?.status || error?.headers) {
+      throw error;
+    }
+    console.error("DEBUG - app.tsx loader error:", error);
+    throw error;
+  }
 };
 
 export default function App() {
