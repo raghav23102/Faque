@@ -38,14 +38,37 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const shopDomain = session?.shop || "";
 
   try {
-    const [faqs, subscription] = await Promise.all([
+    const [faqs, subscription, billingResult] = await Promise.all([
       prisma.fAQ.findMany({
         where: { shop: shopDomain },
         include: { _count: { select: { questions: true } } },
         orderBy: { updatedAt: "desc" },
       }),
       getSubscription(shopDomain),
+      (async () => {
+        try {
+          return await (billing as any).check({
+            plans: ["Simple", "Pro", "Ultimate"],
+            isTest: true,
+          });
+        } catch (e) {
+          return null;
+        }
+      })()
     ]);
+
+    let currentPlan = subscription.plan;
+    if (billingResult?.hasActivePayment && billingResult.appSubscriptions?.length > 0) {
+      currentPlan = billingResult.appSubscriptions[0].name;
+    } else if (billingResult && !billingResult.hasActivePayment) {
+      currentPlan = "Free";
+    }
+
+    if (subscription.plan !== currentPlan) {
+      const { updateSubscription } = await import("../models/Subscription.server");
+      await updateSubscription(shopDomain, currentPlan);
+      subscription.plan = currentPlan;
+    }
 
     const totalQuestions = faqs.reduce(
       (acc, faq) => acc + faq._count.questions,

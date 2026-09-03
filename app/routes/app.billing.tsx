@@ -16,7 +16,7 @@ import { useLoaderData, useNavigate } from "react-router";
 import prisma from "../db.server";
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
-import { getSubscription } from "../models/Subscription.server";
+import { getSubscription, updateSubscription } from "../models/Subscription.server";
 
 export const headers: HeadersFunction = (headersArgs) => {
   return boundary.headers(headersArgs);
@@ -26,7 +26,27 @@ import { useState, useCallback } from "react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session, billing } = await authenticate.admin(request);
+  
+  let currentPlan = "Free";
+  try {
+    const { hasActivePayment, appSubscriptions } = await (billing as any).check({
+      plans: ["Simple", "Pro", "Ultimate"],
+      isTest: true,
+    });
+    if (hasActivePayment && appSubscriptions.length > 0) {
+      currentPlan = appSubscriptions[0].name;
+    }
+  } catch (err) {
+    console.error("Error checking billing:", err);
+  }
+
+  // Sync with local database
   const subscription = await getSubscription(session.shop);
+  if (subscription.plan !== currentPlan) {
+    await updateSubscription(session.shop, currentPlan);
+    subscription.plan = currentPlan;
+  }
+
   return { subscription, shop: session.shop };
 };
 
