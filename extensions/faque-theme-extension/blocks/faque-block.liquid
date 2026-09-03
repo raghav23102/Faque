@@ -19,7 +19,7 @@
     
     // Shopify App Proxies are available at the subpath defined in shopify.app.toml
     // prefix = apps, subpath = faque -> /apps/faque
-    fetch('/apps/faque/api/proxy/faq?faqId=' + encodeURIComponent(faqId))
+    fetch('/apps/faque/faq?faqId=' + encodeURIComponent(faqId))
       .then(response => {
         if (!response.ok) throw new Error('Failed to load FAQ');
         return response.text();

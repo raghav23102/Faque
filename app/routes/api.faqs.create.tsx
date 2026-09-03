@@ -21,16 +21,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const faq = await prisma.fAQ.create({
-      data: {
-        shop: session.shop,
-        name,
-        heading,
-        description,
-        designId: "01",
-        settings: JSON.stringify({}),
-      },
-    });
+    let newId = "";
+    let faq = null;
+    
+    // Try to generate a unique 4-digit ID
+    for (let attempts = 0; attempts < 5; attempts++) {
+      newId = `faque-${Math.floor(1000 + Math.random() * 9000)}`;
+      try {
+        faq = await prisma.fAQ.create({
+          data: {
+            id: newId,
+            shop: session.shop,
+            name,
+            heading,
+            description,
+            designId: "01",
+            settings: JSON.stringify({}),
+          },
+        });
+        break; // Success
+      } catch (e: any) {
+        if (e.code === 'P2002') continue; // Unique constraint failed, retry
+        throw e;
+      }
+    }
+
+    if (!faq) {
+      throw new Error("Failed to generate a unique FAQ ID. Please try again.");
+    }
+
     return Response.json({ faqId: faq.id });
   } catch (err: any) {
     return Response.json({ error: err.message }, { status: 500 });

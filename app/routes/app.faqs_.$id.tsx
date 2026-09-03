@@ -330,16 +330,32 @@ export default function EditFAQ() {
           <Card>
             <BlockStack gap="300">
               <Text as="h2" variant="headingMd">FAQ Info</Text>
-              <BlockStack gap="100">
-                <Text as="p" variant="bodySm" tone="subdued">HEADING</Text>
-                <Text as="p" fontWeight="semibold">{faq.heading}</Text>
-              </BlockStack>
-              {faq.description && (
                 <BlockStack gap="100">
-                  <Text as="p" variant="bodySm" tone="subdued">DESCRIPTION</Text>
-                  <Text as="p">{faq.description}</Text>
+                  <Text as="p" variant="bodySm" tone="subdued">FAQ ID (For Theme Editor)</Text>
+                  <InlineStack gap="200" blockAlign="center">
+                    <Text as="p" fontWeight="regular" tone="subdued">{faq.id}</Text>
+                    <Button 
+                      size="micro" 
+                      onClick={() => {
+                        navigator.clipboard.writeText(faq.id);
+                        shopify.toast.show("ID copied to clipboard!");
+                      }}
+                    >
+                      Copy
+                    </Button>
+                  </InlineStack>
                 </BlockStack>
-              )}
+
+                <BlockStack gap="100">
+                  <Text as="p" variant="bodySm" tone="subdued">HEADING</Text>
+                  <Text as="p" fontWeight="semibold">{faq.heading}</Text>
+                </BlockStack>
+                {faq.description && (
+                  <BlockStack gap="100">
+                    <Text as="p" variant="bodySm" tone="subdued">DESCRIPTION</Text>
+                    <Text as="p">{faq.description}</Text>
+                  </BlockStack>
+                )}
 
               {faq.designId === "08" && (
                 <>
