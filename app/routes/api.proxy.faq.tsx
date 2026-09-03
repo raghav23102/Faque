@@ -39,6 +39,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       headers: {
         "Content-Type": "text/html",
         "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-cache, no-store, must-revalidate",
       },
     });
   } catch (err) {
