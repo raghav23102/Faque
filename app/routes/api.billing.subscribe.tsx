@@ -23,10 +23,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
+    const shopName = session.shop.split(".")[0];
+    const returnUrl = `https://admin.shopify.com/store/${shopName}/apps/${process.env.SHOPIFY_API_KEY}/app/billing`;
+    
     const result = await (billing as any).request({
       plan,
       isTest: true, // Remove this in production
-      returnUrl: `${process.env.SHOPIFY_APP_URL}/app/billing`,
+      returnUrl: returnUrl,
     });
 
     return Response.json({ confirmationUrl: result.confirmationUrl || result.appSubscriptionCreate?.confirmationUrl });
