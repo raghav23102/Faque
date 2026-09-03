@@ -254,7 +254,7 @@ export default function Dashboard() {
                             {faq.name}
                           </Text>
                           <InlineStack gap="200" blockAlign="center">
-                            <Badge>{faq._count.questions} questions</Badge>
+                            <Badge>{`${faq._count.questions} questions`}</Badge>
                             {design && (
                               <Badge tone="info">{design.name}</Badge>
                             )}

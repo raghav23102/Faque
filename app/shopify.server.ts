@@ -38,17 +38,17 @@ const shopify = shopifyApp({
     "Simple": {
       amount: 29.0,
       currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      interval: BillingInterval.Every30Days as any,
     },
     "Pro": {
       amount: 79.0,
       currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      interval: BillingInterval.Every30Days as any,
     },
     "Ultimate": {
       amount: 119.0,
       currencyCode: "USD",
-      interval: BillingInterval.Every30Days,
+      interval: BillingInterval.Every30Days as any,
     }
   }
 });

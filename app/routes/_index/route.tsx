@@ -128,7 +128,7 @@ export default function LandingPage() {
             paddingTop: "16px",
             width: "100%",
             display: "flex",
-            justify: "center",
+            justifyContent: "center",
             gap: "12px",
             fontSize: "12px",
             color: "#64748b",

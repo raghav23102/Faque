@@ -52,9 +52,9 @@ export default async function handler(req, res) {
       }
     }
 
-    // Safely send body text/data
-    const responseText = await webResponse.text();
-    res.end(responseText);
+    // Safely send body data
+    const arrayBuffer = await webResponse.arrayBuffer();
+    res.end(Buffer.from(arrayBuffer));
   } catch (error) {
     console.error("Vercel Serverless Function Error:", error);
     res.statusCode = 500;

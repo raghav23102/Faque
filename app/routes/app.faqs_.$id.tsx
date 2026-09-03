@@ -299,7 +299,7 @@ export default function EditFAQ() {
             <BlockStack gap="200">
               <InlineStack align="space-between">
                 <Text as="h2" variant="headingMd">Questions</Text>
-                <Badge>{faq.questions.length} total</Badge>
+                <Badge>{`${faq.questions.length} total`}</Badge>
               </InlineStack>
               {faq.questions.length === 0 ? (
                 <div style={{ padding: "20px", textAlign: "center" }}>

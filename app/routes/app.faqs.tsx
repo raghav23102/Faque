@@ -154,7 +154,7 @@ export default function FAQs() {
                               {heading}
                             </Text>
                             <InlineStack gap="200" blockAlign="center">
-                              <Badge>{_count.questions} questions</Badge>
+                              <Badge>{`${_count.questions} questions`}</Badge>
                               {design && (
                                 <Badge tone={(categoryColor[design.category] as any) || "info"}>
                                   {design.name}
@@ -201,7 +201,7 @@ export default function FAQs() {
               <BlockStack gap="300">
                 <InlineStack align="space-between" blockAlign="center">
                   <Text as="h2" variant="headingMd">Available Designs</Text>
-                  <Badge>{DESIGN_REGISTRY.length} total</Badge>
+                  <Badge>{`${DESIGN_REGISTRY.length} total`}</Badge>
                 </InlineStack>
                 <Text as="p" tone="subdued" variant="bodySm">
                   Your plan ({currentPlan}) unlocks{" "}
@@ -224,14 +224,14 @@ export default function FAQs() {
                         {unlocked ? (
                           <Badge tone="success">Unlocked</Badge>
                         ) : (
-                          <Badge tone="warning">{design.planRequired}+</Badge>
+                          <Badge tone="warning">{`${design.planRequired}+`}</Badge>
                         )}
                       </InlineStack>
                     );
                   })}
                 </BlockStack>
                 <Button fullWidth onClick={() => navigate("/app/designs")}>
-                  See all {DESIGN_REGISTRY.length} designs
+                  {`See all ${DESIGN_REGISTRY.length} designs`}
                 </Button>
               </BlockStack>
             </Card>

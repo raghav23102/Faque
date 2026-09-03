@@ -23,7 +23,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const result = await billing.request({
+    const result = await (billing as any).request({
       plan,
       isTest: true, // Remove this in production
       returnUrl: `${process.env.SHOPIFY_APP_URL}/app/billing`,
