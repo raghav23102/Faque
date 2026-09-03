@@ -1,5 +1,11 @@
 import { createRequestHandler } from "@react-router/node";
 
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 let requestHandler;
 
 export default async function handler(req, res) {
@@ -32,23 +38,11 @@ export default async function handler(req, res) {
     };
 
     if (req.method !== "GET" && req.method !== "HEAD") {
-      if (req.rawBody) {
-        init.body = typeof req.rawBody === "string" ? Buffer.from(req.rawBody) : req.rawBody;
-      } else if (req.body) {
-        if (Buffer.isBuffer(req.body)) {
-          init.body = req.body;
-        } else if (typeof req.body === "string") {
-          init.body = Buffer.from(req.body, "utf8");
-        } else {
-          init.body = Buffer.from(JSON.stringify(req.body), "utf8");
-        }
-      } else {
-        const buffers = [];
-        for await (const chunk of req) {
-          buffers.push(chunk);
-        }
-        init.body = Buffer.concat(buffers);
+      const buffers = [];
+      for await (const chunk of req) {
+        buffers.push(chunk);
       }
+      init.body = Buffer.concat(buffers);
     }
 
     const webRequest = new Request(url.href, init);
