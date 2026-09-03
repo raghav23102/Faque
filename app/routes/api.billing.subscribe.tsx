@@ -29,8 +29,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       returnUrl: `${process.env.SHOPIFY_APP_URL}/app/billing`,
     });
 
-    return Response.json({ confirmationUrl: result.confirmationUrl });
+    return Response.json({ confirmationUrl: result.confirmationUrl || result.appSubscriptionCreate?.confirmationUrl });
   } catch (err: any) {
+    // Shopify App Remix often throws a Response object to trigger a redirect
+    if (err instanceof Response || (err && typeof err.status === 'number' && err.headers)) {
+      const reauthUrl = err.headers.get("X-Shopify-API-Request-Failure-Reauthorize-Url");
+      if (reauthUrl) {
+        return Response.json({ confirmationUrl: reauthUrl });
+      }
+      
+      const location = err.headers.get("location") || err.headers.get("Location");
+      if (location) {
+        return Response.json({ confirmationUrl: location });
+      }
+    }
+    
     console.error("Billing error:", err);
     return Response.json(
       { error: err.message || "Failed to create subscription." },
