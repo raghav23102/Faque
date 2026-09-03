@@ -11,10 +11,9 @@ automatically_update_urls_on_dev = true
 [webhooks]
 api_version = "2026-07"
 
-  [webhooks.privacy_compliance]
-  customers_data_request_url = "https://faque.flamaradigital.online/webhooks/customers/data_request"
-  customers_redact_url = "https://faque.flamaradigital.online/webhooks/customers/redact"
-  shop_redact_url = "https://faque.flamaradigital.online/webhooks/shop/redact"
+  [[webhooks.subscriptions]]
+  compliance_topics = ["customers/data_request", "customers/redact", "shop/redact"]
+  uri = "https://faque.flamaradigital.online/webhooks/compliance"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
