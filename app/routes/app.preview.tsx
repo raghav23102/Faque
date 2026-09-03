@@ -27,10 +27,140 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { faqs, activeFaq };
 };
 
+function FaqPreviewRenderer({ faq, deviceView }: { faq: any, deviceView: string }) {
+  const isMobile = deviceView === "mobile";
+  const isTablet = deviceView === "tablet";
+  const designId = faq.designId;
+
+  // Base layout styles based on design
+  let containerStyle: React.CSSProperties = {
+    fontFamily: designId === "04" || designId === "09" ? "Georgia, serif" : "sans-serif",
+    backgroundColor: designId === "10" ? "#1a1a1a" : "transparent",
+    color: designId === "10" ? "#fff" : "#333",
+    padding: "20px",
+    borderRadius: "8px",
+    width: "100%",
+  };
+
+  let listStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  };
+
+  let itemStyle: React.CSSProperties = {
+    padding: "16px 0",
+    borderBottom: "1px solid #e1e3e5",
+  };
+
+  let questionStyle: React.CSSProperties = {
+    fontSize: "16px",
+    fontWeight: "bold",
+    margin: "0 0 10px 0",
+    cursor: "pointer",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  };
+
+  let answerStyle: React.CSSProperties = {
+    margin: 0,
+    color: designId === "10" ? "#ccc" : "#555",
+    lineHeight: "1.6",
+    fontSize: "14px"
+  };
+
+  // Design-specific overrides
+  if (designId === "02" || designId === "11") {
+    // Modern Cards
+    itemStyle = {
+      padding: "20px",
+      backgroundColor: designId === "10" ? "#2a2a2a" : "#fff",
+      border: "1px solid #e1e3e5",
+      borderRadius: "12px",
+      boxShadow: "0 4px 6px rgba(0,0,0,0.05)",
+    };
+  }
+
+  if (designId === "03") {
+    // Two Column
+    listStyle = {
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+      gap: "24px",
+    };
+    itemStyle = { ...itemStyle, borderBottom: "none" };
+  }
+
+  if (designId === "04") {
+    // Editorial
+    itemStyle = {
+      padding: "24px 0",
+      borderBottom: "1px solid #000",
+      display: "flex",
+      gap: "20px"
+    };
+    questionStyle = { ...questionStyle, fontSize: "20px", fontWeight: "normal" };
+  }
+
+  if (designId === "06" || designId === "13") {
+    // Sidebar / Split
+    listStyle = {
+      display: "grid",
+      gridTemplateColumns: isMobile ? "1fr" : "1fr 2fr",
+      gap: "40px",
+    };
+    itemStyle = { ...itemStyle, borderBottom: "none", padding: "10px 0" };
+  }
+
+  if (designId === "12") {
+    // Borderless
+    itemStyle = { ...itemStyle, borderBottom: "none", padding: "12px 0" };
+  }
+
+  if (designId === "15") {
+    // Compact
+    listStyle.gap = "8px";
+    itemStyle.padding = "8px 0";
+    questionStyle.fontSize = "14px";
+  }
+
+  return (
+    <div style={containerStyle}>
+      <h2 style={{ 
+        textAlign: designId === "09" ? 'center' : 'left', 
+        fontSize: '24px', 
+        marginBottom: '30px',
+        fontFamily: containerStyle.fontFamily
+      }}>
+        {faq.heading}
+      </h2>
+      
+      <div style={listStyle}>
+        {faq.questions.map((q: any, idx: number) => (
+          <div key={q.id} style={itemStyle}>
+            {designId === "04" && (
+              <div style={{ fontSize: '24px', color: '#999', fontWeight: 'bold' }}>
+                {(idx + 1).toString().padStart(2, '0')}
+              </div>
+            )}
+            <div style={{ flex: 1 }}>
+              <div style={questionStyle}>
+                {q.question}
+                {designId !== "12" && designId !== "13" && <span>+</span>}
+              </div>
+              <div style={answerStyle}>{q.answer}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Preview() {
   const { faqs, activeFaq } = useLoaderData<typeof loader>();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const [deviceView, setDeviceView] = useState("desktop");
 
@@ -78,35 +208,27 @@ export default function Preview() {
               <div style={{ padding: '40px', display: 'flex', justifyContent: 'center', backgroundColor: '#e4e5e7', minHeight: '500px' }}>
                 <div style={{ 
                   width: previewWidth, 
-                  backgroundColor: 'white', 
+                  backgroundColor: activeFaq?.designId === "10" ? '#1a1a1a' : 'white', 
                   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
                   transition: 'width 0.3s ease',
                   padding: '20px',
-                  borderRadius: '8px'
+                  borderRadius: '8px',
+                  overflow: 'hidden'
                 }}>
                   {!activeFaq ? (
                     <Text as="p" alignment="center" tone="subdued">Select an FAQ to preview</Text>
+                  ) : activeFaq.questions.length === 0 ? (
+                    <p style={{ textAlign: 'center', color: '#666' }}>No questions added yet.</p>
                   ) : (
-                    <div>
-                      <h2 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '20px' }}>{activeFaq.heading}</h2>
-                      {activeFaq.questions.length === 0 ? (
-                        <p style={{ textAlign: 'center', color: '#666' }}>No questions added yet.</p>
-                      ) : (
-                        activeFaq.questions.map(q => (
-                          <div key={q.id} style={{ borderBottom: '1px solid #eee', padding: '15px 0' }}>
-                            <h3 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 10px 0' }}>{q.question}</h3>
-                            <p style={{ margin: 0, color: '#555', lineHeight: '1.5' }}>{q.answer}</p>
-                          </div>
-                        ))
-                      )}
-                      
-                      <div style={{ marginTop: '30px', textAlign: 'center', fontSize: '12px', color: '#999' }}>
-                        Active Design: {DESIGN_REGISTRY.find(d => d.id === activeFaq.designId)?.name || activeFaq.designId}
-                      </div>
-                    </div>
+                    <FaqPreviewRenderer faq={activeFaq} deviceView={deviceView} />
                   )}
                 </div>
               </div>
+              {activeFaq && (
+                <div style={{ padding: '10px', textAlign: 'center', fontSize: '12px', color: '#999', backgroundColor: '#f4f6f8' }}>
+                  Active Design: {DESIGN_REGISTRY.find(d => d.id === activeFaq.designId)?.name || activeFaq.designId}
+                </div>
+              )}
             </Card>
           </Layout.Section>
         </Layout>
