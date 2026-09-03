@@ -11,17 +11,10 @@ automatically_update_urls_on_dev = true
 [webhooks]
 api_version = "2026-10"
 
-  [[webhooks.subscriptions]]
-  topics = [ "customers/data_request" ]
-  uri = "/webhooks/customers/data_request"
-
-  [[webhooks.subscriptions]]
-  topics = [ "customers/redact" ]
-  uri = "/webhooks/customers/redact"
-
-  [[webhooks.subscriptions]]
-  topics = [ "shop/redact" ]
-  uri = "/webhooks/shop/redact"
+  [webhooks.privacy_compliance]
+  customers_data_request_url = "https://faque.flamaradigital.online/webhooks/customers/data_request"
+  customers_redact_url = "https://faque.flamaradigital.online/webhooks/customers/redact"
+  shop_redact_url = "https://faque.flamaradigital.online/webhooks/shop/redact"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
