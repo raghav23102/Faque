@@ -202,10 +202,34 @@ export default function EditFAQ() {
   const [isAdding, setIsAdding] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isChangingDesign, setIsChangingDesign] = useState(false);
+  const [isDeletingId, setIsDeletingId] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
   const [newCategory, setNewCategory] = useState("");
+
+  const handleDeleteQuestion = useCallback(async (questionId: string) => {
+    setIsDeletingId(questionId);
+    setError("");
+    try {
+      const token = await shopify.idToken();
+      const body = new FormData();
+      body.append("questionId", questionId);
+      const response = await fetch("/api/questions/delete", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body,
+      });
+      const data = await response.json();
+      if (!response.ok || data.error) throw new Error(data.error || "Server error");
+      shopify.toast.show("Question deleted!");
+      revalidator.revalidate();
+    } catch (err: any) {
+      setError(err.message || "Failed to delete question.");
+    } finally {
+      setIsDeletingId(null);
+    }
+  }, [revalidator]);
 
   const currentDesign = DESIGN_REGISTRY.find(d => d.id === faq.designId);
 
@@ -234,13 +258,14 @@ export default function EditFAQ() {
       setIsAdding(false);
       setNewQuestion("");
       setNewAnswer("");
+      setNewCategory("");
       revalidator.revalidate();
     } catch (err: any) {
       setError(err.message || "Failed to add question.");
     } finally {
       setIsSaving(false);
     }
-  }, [newQuestion, newAnswer, faq.id, revalidator]);
+  }, [newQuestion, newAnswer, newCategory, faq.id, revalidator]);
 
   const handleChangeDesign = useCallback(async (designId: string) => {
     setIsChangingDesign(true);
@@ -316,11 +341,26 @@ export default function EditFAQ() {
                     const { id, question, answer, category } = item;
                     return (
                       <ResourceItem id={id} onClick={() => {}}>
-                        <InlineStack align="space-between">
-                          <Text variant="bodyMd" fontWeight="bold" as="h3">{question}</Text>
-                          {category && <Badge tone="info">{category}</Badge>}
+                        <InlineStack align="space-between" blockAlign="start">
+                          <div style={{ flex: 1, paddingRight: '16px' }}>
+                            <InlineStack align="start" gap="200" blockAlign="center">
+                              <Text variant="bodyMd" fontWeight="bold" as="h3">{question}</Text>
+                              {category && <Badge tone="info">{category}</Badge>}
+                            </InlineStack>
+                            <Text variant="bodyMd" as="p" tone="subdued">{answer}</Text>
+                          </div>
+                          <Button 
+                            tone="critical"
+                            variant="plain" 
+                            loading={isDeletingId === id} 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteQuestion(id);
+                            }}
+                          >
+                            Delete
+                          </Button>
                         </InlineStack>
-                        <Text variant="bodyMd" as="p" tone="subdued">{answer}</Text>
                       </ResourceItem>
                     );
                   }}
