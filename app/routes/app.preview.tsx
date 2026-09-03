@@ -32,6 +32,8 @@ function FaqPreviewRenderer({ faq, deviceView }: { faq: any, deviceView: string 
   const isTablet = deviceView === "tablet";
   const designId = faq.designId;
 
+  const [activeCategory, setActiveCategory] = useState("All");
+
   // Base layout styles
   let containerStyle: React.CSSProperties = {
     fontFamily: ["04", "09", "13"].includes(designId) ? "Georgia, serif" : "sans-serif",
@@ -133,16 +135,24 @@ function FaqPreviewRenderer({ faq, deviceView }: { faq: any, deviceView: string 
       ));
     }
 
+    // Dynamic Categories for 05 and 06
+    const categories = Array.from(new Set(questions.map((q: any) => q.category).filter(Boolean)));
+    const hasCategories = categories.length > 0;
+    const filteredQuestions = activeCategory === "All" ? questions : questions.filter((q: any) => q.category === activeCategory);
+
     // 05 Category Tabs
     if (designId === "05") {
       return (
         <div>
-          <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto' }}>
-            <span style={{ padding: '6px 16px', background: '#000', color: '#fff', borderRadius: '20px', fontSize: '14px' }}>All</span>
-            <span style={{ padding: '6px 16px', background: '#f4f6f8', color: '#333', borderRadius: '20px', fontSize: '14px' }}>Shipping</span>
-            <span style={{ padding: '6px 16px', background: '#f4f6f8', color: '#333', borderRadius: '20px', fontSize: '14px' }}>Returns</span>
-          </div>
-          {questions.map((q: any) => (
+          {hasCategories && (
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', overflowX: 'auto' }}>
+              <span onClick={() => setActiveCategory("All")} style={{ padding: '6px 16px', background: activeCategory === "All" ? '#000' : '#f4f6f8', color: activeCategory === "All" ? '#fff' : '#333', borderRadius: '20px', fontSize: '14px', cursor: 'pointer' }}>All</span>
+              {categories.map((cat: any) => (
+                <span key={cat} onClick={() => setActiveCategory(cat)} style={{ padding: '6px 16px', background: activeCategory === cat ? '#000' : '#f4f6f8', color: activeCategory === cat ? '#fff' : '#333', borderRadius: '20px', fontSize: '14px', cursor: 'pointer' }}>{cat}</span>
+              ))}
+            </div>
+          )}
+          {filteredQuestions.map((q: any) => (
             <div key={q.id} style={itemStyle}>
               <div style={questionStyle}>{q.question}</div>
               <div style={answerStyle}>{q.answer}</div>
@@ -156,16 +166,17 @@ function FaqPreviewRenderer({ faq, deviceView }: { faq: any, deviceView: string 
     if (designId === "06") {
       return (
         <div style={{ display: isMobile ? 'block' : 'flex', gap: '48px' }}>
-          {!isMobile && (
+          {!isMobile && hasCategories && (
             <div style={{ width: '250px', flexShrink: 0, borderRight: '1px solid #eee', paddingRight: '24px' }}>
               <div style={{ fontWeight: 'bold', marginBottom: '16px' }}>Categories</div>
-              <div style={{ color: '#005bd3', marginBottom: '12px' }}>General</div>
-              <div style={{ color: '#555', marginBottom: '12px' }}>Shipping</div>
-              <div style={{ color: '#555' }}>Payments</div>
+              <div onClick={() => setActiveCategory("All")} style={{ color: activeCategory === "All" ? '#005bd3' : '#555', marginBottom: '12px', cursor: 'pointer', fontWeight: activeCategory === "All" ? 'bold' : 'normal' }}>All</div>
+              {categories.map((cat: any) => (
+                <div key={cat} onClick={() => setActiveCategory(cat)} style={{ color: activeCategory === cat ? '#005bd3' : '#555', marginBottom: '12px', cursor: 'pointer', fontWeight: activeCategory === cat ? 'bold' : 'normal' }}>{cat}</div>
+              ))}
             </div>
           )}
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {questions.map((q: any) => (
+            {filteredQuestions.map((q: any) => (
               <div key={q.id} style={{ paddingBottom: '16px', borderBottom: '1px solid #eee' }}>
                 <div style={questionStyle}>{q.question}</div>
                 <div style={answerStyle}>{q.answer}</div>

@@ -55,8 +55,65 @@ function renderFaqHTML(faq: any, settings: any) {
   let html = `<div class="faque-container design-${designId}" style="width: 100%; box-sizing: border-box; font-family: sans-serif;">`;
   html += `<h2 style="margin-bottom: 24px; font-size: 24px;">${faq.heading}</h2>`;
   
+  const categories = Array.from(new Set(questions.map((q: any) => q.category).filter(Boolean)));
+  const hasCategories = categories.length > 0;
+
+  // 05: Category Tabs
+  if (designId === "05") {
+    if (hasCategories) {
+      html += `<div class="faque-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto;">`;
+      html += `<span class="faque-tab active" data-category="All" style="padding: 6px 16px; background: #000; color: #fff; border-radius: 20px; font-size: 14px; cursor: pointer;">All</span>`;
+      for (const cat of categories) {
+        html += `<span class="faque-tab" data-category="${cat}" style="padding: 6px 16px; background: #f4f6f8; color: #333; border-radius: 20px; font-size: 14px; cursor: pointer;">${cat}</span>`;
+      }
+      html += `</div>`;
+    }
+    html += `<div class="faque-list" style="display: flex; flex-direction: column; gap: 16px;">`;
+    for (let i = 0; i < questions.length; i++) {
+      const qCat = questions[i].category || "";
+      html += `
+        <div class="faque-item" data-category="${qCat}" style="padding: 16px 0; border-bottom: 1px solid #e1e3e5; cursor: pointer;">
+          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+            ${questions[i].question} <span class="faque-icon">+</span>
+          </div>
+          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
+            ${questions[i].answer}
+          </div>
+        </div>
+      `;
+    }
+    html += `</div>`;
+  }
+  // 06: Sidebar FAQ
+  else if (designId === "06") {
+    html += `<div style="display: flex; gap: 48px; flex-wrap: wrap;">`;
+    if (hasCategories) {
+      html += `<div style="width: 250px; flex-shrink: 0; border-right: 1px solid #eee; padding-right: 24px;">`;
+      html += `<div style="font-weight: bold; margin-bottom: 16px;">Categories</div>`;
+      html += `<div class="faque-tab active" data-category="All" style="color: #005bd3; font-weight: bold; margin-bottom: 12px; cursor: pointer;">All</div>`;
+      for (const cat of categories) {
+        html += `<div class="faque-tab" data-category="${cat}" style="color: #555; margin-bottom: 12px; cursor: pointer;">${cat}</div>`;
+      }
+      html += `</div>`;
+    }
+    html += `<div class="faque-list" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 16px;">`;
+    for (let i = 0; i < questions.length; i++) {
+      const qCat = questions[i].category || "";
+      html += `
+        <div class="faque-item" data-category="${qCat}" style="padding-bottom: 16px; border-bottom: 1px solid #eee; cursor: pointer;">
+          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
+            ${questions[i].question}
+          </div>
+          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
+            ${questions[i].answer}
+          </div>
+        </div>
+      `;
+    }
+    html += `</div></div>`;
+  }
   // 08: Image FAQ
-  if (designId === "08") {
+  else if (designId === "08") {
     html += `<div style="display: flex; gap: 32px; flex-wrap: wrap;">`;
     html += `<div style="flex: 1; min-width: 300px;"><img src="${imageUrl}" style="width: 100%; border-radius: 8px; object-fit: cover;" /></div>`;
     html += `<div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 16px;">`;
@@ -94,12 +151,14 @@ function renderFaqHTML(faq: any, settings: any) {
   
   html += `</div>`;
   
-  // Accordion script
+  // Accordion & Category script
   html += `
     <script>
       (function() {
         const container = document.currentScript.parentElement;
         const items = container.querySelectorAll('.faque-item');
+        
+        // Accordion Logic
         items.forEach(item => {
           item.addEventListener('click', () => {
             const answer = item.querySelector('.faque-a');
@@ -113,6 +172,45 @@ function renderFaqHTML(faq: any, settings: any) {
             }
           });
         });
+
+        // Category Tab Logic
+        const tabs = container.querySelectorAll('.faque-tab');
+        if (tabs.length > 0) {
+          tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+              const category = tab.getAttribute('data-category');
+              
+              // Update active tab style
+              tabs.forEach(t => {
+                if (container.classList.contains('design-05')) {
+                  t.style.background = '#f4f6f8';
+                  t.style.color = '#333';
+                } else if (container.classList.contains('design-06')) {
+                  t.style.color = '#555';
+                  t.style.fontWeight = 'normal';
+                }
+              });
+
+              if (container.classList.contains('design-05')) {
+                tab.style.background = '#000';
+                tab.style.color = '#fff';
+              } else if (container.classList.contains('design-06')) {
+                tab.style.color = '#005bd3';
+                tab.style.fontWeight = 'bold';
+              }
+
+              // Filter items
+              items.forEach(item => {
+                const itemCat = item.getAttribute('data-category');
+                if (category === 'All' || itemCat === category) {
+                  item.style.display = 'block';
+                } else {
+                  item.style.display = 'none';
+                }
+              });
+            });
+          });
+        }
       })();
     </script>
   `;

@@ -13,6 +13,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const faqId = (formData.get("faqId") as string)?.trim();
   const question = (formData.get("question") as string)?.trim();
   const answer = (formData.get("answer") as string)?.trim();
+  const category = (formData.get("category") as string)?.trim() || null;
 
   if (!faqId || !question || !answer) {
     return Response.json({ error: "faqId, question and answer are required." }, { status: 422 });
@@ -31,7 +32,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const nextPos = (faq.questions[0]?.position || 0) + 1;
 
   const newQuestion = await prisma.question.create({
-    data: { faqId, question, answer, position: nextPos }
+    data: { faqId, question, answer, category, position: nextPos }
   });
 
   return Response.json({ question: newQuestion });

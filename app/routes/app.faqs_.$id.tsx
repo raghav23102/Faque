@@ -205,6 +205,7 @@ export default function EditFAQ() {
   const [error, setError] = useState("");
   const [newQuestion, setNewQuestion] = useState("");
   const [newAnswer, setNewAnswer] = useState("");
+  const [newCategory, setNewCategory] = useState("");
 
   const currentDesign = DESIGN_REGISTRY.find(d => d.id === faq.designId);
 
@@ -221,6 +222,7 @@ export default function EditFAQ() {
       body.append("faqId", faq.id);
       body.append("question", newQuestion.trim());
       body.append("answer", newAnswer.trim());
+      if (newCategory.trim()) body.append("category", newCategory.trim());
       const response = await fetch("/api/questions/create", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
@@ -283,9 +285,10 @@ export default function EditFAQ() {
                 <FormLayout>
                   <TextField label="Question" value={newQuestion} onChange={setNewQuestion} autoComplete="off" placeholder="e.g. What is your return policy?" />
                   <TextField label="Answer" value={newAnswer} onChange={setNewAnswer} autoComplete="off" multiline={4} placeholder="Write a clear, helpful answer..." />
+                  <TextField label="Category (Optional)" value={newCategory} onChange={setNewCategory} autoComplete="off" placeholder="e.g. Shipping, Returns" />
                   <InlineStack gap="200">
                     <Button variant="primary" loading={isSaving} onClick={handleAddQuestion}>Save Question</Button>
-                    <Button onClick={() => { setIsAdding(false); setError(""); setNewQuestion(""); setNewAnswer(""); }}>Cancel</Button>
+                    <Button onClick={() => { setIsAdding(false); setError(""); setNewQuestion(""); setNewAnswer(""); setNewCategory(""); }}>Cancel</Button>
                   </InlineStack>
                 </FormLayout>
               </BlockStack>
@@ -310,10 +313,13 @@ export default function EditFAQ() {
                   resourceName={{ singular: "Question", plural: "Questions" }}
                   items={faq.questions}
                   renderItem={(item) => {
-                    const { id, question, answer } = item;
+                    const { id, question, answer, category } = item;
                     return (
                       <ResourceItem id={id} onClick={() => {}}>
-                        <Text variant="bodyMd" fontWeight="bold" as="h3">{question}</Text>
+                        <InlineStack align="space-between">
+                          <Text variant="bodyMd" fontWeight="bold" as="h3">{question}</Text>
+                          {category && <Badge tone="info">{category}</Badge>}
+                        </InlineStack>
                         <Text variant="bodyMd" as="p" tone="subdued">{answer}</Text>
                       </ResourceItem>
                     );

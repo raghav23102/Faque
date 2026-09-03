@@ -50,6 +50,7 @@ model Question {
   faq       FAQ      @relation(fields: [faqId], references: [id], onDelete: Cascade)
   question  String
   answer    String
+  category  String?
   position  Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
