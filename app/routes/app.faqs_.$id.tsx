@@ -340,6 +340,42 @@ export default function EditFAQ() {
                   <Text as="p">{faq.description}</Text>
                 </BlockStack>
               )}
+
+              {faq.designId === "08" && (
+                <>
+                  <Divider />
+                  <BlockStack gap="200">
+                    <Text as="h3" variant="headingSm">Design Settings</Text>
+                    <TextField 
+                      label="Image URL" 
+                      value={(() => {
+                        try { return JSON.parse(faq.settings || "{}").imageUrl || ""; } 
+                        catch { return ""; }
+                      })()} 
+                      onChange={async (val) => {
+                        setIsChangingDesign(true);
+                        try {
+                          const token = await shopify.idToken();
+                          const response = await fetch("/api/faqs/design", {
+                            method: "POST",
+                            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+                            body: JSON.stringify({ faqId: faq.id, settings: { imageUrl: val } }),
+                          });
+                          if (!response.ok) throw new Error("Failed to save image");
+                          revalidator.revalidate();
+                        } catch(e) {
+                          console.error(e);
+                        } finally {
+                          setIsChangingDesign(false);
+                        }
+                      }}
+                      autoComplete="off" 
+                      placeholder="https://your-store.com/image.jpg"
+                      helpText="Provide a URL for the image to display next to your FAQ."
+                    />
+                  </BlockStack>
+                </>
+              )}
             </BlockStack>
           </Card>
 

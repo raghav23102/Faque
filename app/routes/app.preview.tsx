@@ -197,10 +197,14 @@ function FaqPreviewRenderer({ faq, deviceView }: { faq: any, deviceView: string 
 
     // 08 Image + FAQ
     if (designId === "08") {
+      let imageUrl = "";
+      try { imageUrl = JSON.parse(faq.settings || "{}").imageUrl; } catch(e) {}
+      if (!imageUrl) imageUrl = "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png";
+
       return (
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '32px', alignItems: 'start' }}>
-          <div style={{ width: '100%', height: '300px', backgroundColor: '#e8e8e8', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
-            [Image Placeholder]
+          <div style={{ width: '100%', height: '300px', backgroundColor: '#e8e8e8', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', overflow: 'hidden' }}>
+            <img src={imageUrl} alt="FAQ" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div>
             {questions.map((q: any) => (

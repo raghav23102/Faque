@@ -35,3 +35,7 @@ redirect_urls = [
   "https://faque.flamaradigital.online/api/auth"
 ]
 
+[app_proxy]
+url = "https://faque.flamaradigital.online/api/proxy"
+subpath = "faque"
+prefix = "apps"

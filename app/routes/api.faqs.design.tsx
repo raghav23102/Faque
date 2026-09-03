@@ -14,19 +14,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({ error: "Invalid request" }, { status: 400 });
   }
 
-  const { faqId, designId } = body;
+  const { faqId, designId, settings } = body;
 
-  if (!faqId || !designId) {
-    return Response.json({ error: "faqId and designId required" }, { status: 422 });
+  if (!faqId) {
+    return Response.json({ error: "faqId is required" }, { status: 422 });
   }
 
-  // Verify plan access
-  const subscription = await getSubscription(session.shop);
-  if (!canAccessDesign(subscription.plan, designId)) {
-    return Response.json(
-      { error: "Your current plan does not include this design. Please upgrade." },
-      { status: 403 }
-    );
+  if (designId) {
+    // Verify plan access
+    const subscription = await getSubscription(session.shop);
+    if (!canAccessDesign(subscription.plan, designId)) {
+      return Response.json(
+        { error: "Your current plan does not include this design. Please upgrade." },
+        { status: 403 }
+      );
+    }
   }
 
   // Verify FAQ ownership
@@ -38,9 +40,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return Response.json({ error: "FAQ not found" }, { status: 404 });
   }
 
+  let dataToUpdate: any = {};
+  if (designId) dataToUpdate.designId = designId;
+  if (settings) {
+    try {
+      // Merge new settings with old settings
+      const oldSettings = JSON.parse(faq.settings || "{}");
+      dataToUpdate.settings = JSON.stringify({ ...oldSettings, ...settings });
+    } catch {
+      dataToUpdate.settings = JSON.stringify(settings);
+    }
+  }
+
   const updated = await prisma.fAQ.update({
     where: { id: faqId },
-    data: { designId },
+    data: dataToUpdate,
   });
 
   return Response.json({ faq: updated });
