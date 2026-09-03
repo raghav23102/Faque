@@ -31,7 +31,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   try {
     const { hasActivePayment, appSubscriptions } = await (billing as any).check({
       plans: ["Simple", "Pro", "Ultimate"],
-      isTest: false,
+      isTest: true,
     });
     if (hasActivePayment && appSubscriptions.length > 0) {
       currentPlan = appSubscriptions[0].name;

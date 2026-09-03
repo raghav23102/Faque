@@ -30,13 +30,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     if (plan === "Free") {
       const { hasActivePayment, appSubscriptions } = await (billing as any).check({
         plans: ["Simple", "Pro", "Ultimate"],
-        isTest: false,
+        isTest: true,
       });
 
       if (hasActivePayment && appSubscriptions.length > 0) {
         await (billing as any).cancel({
           subscriptionId: appSubscriptions[0].id,
-          isTest: false,
+          isTest: true,
         });
       }
       
@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     // Otherwise, request a new subscription
     const result = await (billing as any).request({
       plan,
-      isTest: false,
+      isTest: true,
       returnUrl: returnUrl,
     });
 
