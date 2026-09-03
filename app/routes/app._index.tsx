@@ -95,51 +95,7 @@ export default function Dashboard() {
       ]}
     >
       <BlockStack gap="500">
-        {/* Welcome Header Banner with Logo */}
-        <Card padding="500">
-          <InlineStack align="space-between" blockAlign="center">
-            <InlineStack gap="400" blockAlign="center">
-              <div
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-                  border: "1px solid #e1e3e5",
-                  flexShrink: 0,
-                }}
-              >
-                <img
-                  src="/faque-logo-1200x1200.jpg"
-                  alt="Faque Logo"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-              <BlockStack gap="100">
-                <InlineStack gap="200" blockAlign="center">
-                  <Text as="h1" variant="headingLg">
-                    Welcome to Faque
-                  </Text>
-                  <Badge tone="success">Active</Badge>
-                </InlineStack>
-                <Text as="p" tone="subdued">
-                  Build and customize high-converting FAQ sections for{" "}
-                  <strong>{shop}</strong>.
-                </Text>
-              </BlockStack>
-            </InlineStack>
 
-            <InlineStack gap="200">
-              <Button onClick={() => navigate("/app/designs")}>
-                Browse Designs
-              </Button>
-              <Button variant="primary" onClick={() => navigate("/app/faqs/new")}>
-                + Create FAQ
-              </Button>
-            </InlineStack>
-          </InlineStack>
-        </Card>
 
         {/* Quick Stat Cards */}
         <Layout>
