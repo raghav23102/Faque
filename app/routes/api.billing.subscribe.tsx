@@ -28,7 +28,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     
     const result = await (billing as any).request({
       plan,
-      isTest: true, // Remove this in production
+      isTest: false,
       returnUrl: returnUrl,
     });
 
