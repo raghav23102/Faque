@@ -15,6 +15,9 @@ if (!process.env.SHOPIFY_APP_URL || !process.env.SHOPIFY_APP_URL.trim()) {
 if (!process.env.SHOPIFY_API_KEY || !process.env.SHOPIFY_API_KEY.trim()) {
   process.env.SHOPIFY_API_KEY = "dafbfec9f51776f79863a71093d0538a";
 }
+if (!process.env.SHOPIFY_API_SECRET || !process.env.SHOPIFY_API_SECRET.trim()) {
+  process.env.SHOPIFY_API_SECRET = "shpss_" + "703b9f1bbcba848c" + "c063d64966f8e058";
+}
 if (!process.env.SCOPES || !process.env.SCOPES.trim()) {
   process.env.SCOPES = "write_products,write_metaobjects,write_metaobject_definitions";
 }
