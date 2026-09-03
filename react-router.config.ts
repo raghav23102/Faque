@@ -1,13 +1,7 @@
 import type { Config } from "@react-router/dev/config";
 
 export default {
-  // Allow Shopify admin origins to POST to our action routes
-  // This fixes the CSRF check that blocks form submissions from the Shopify iframe
-  allowedActionOrigins: [
-    "*.myshopify.com",
-    "*.shopify.com",
-    "admin.shopify.com",
-    "localhost",
-    "127.0.0.1",
-  ],
+  // Webhook security is handled by Shopify's authenticate.webhook() HMAC verification.
+  // Removing allowedActionOrigins so Shopify's server-to-server webhook delivery
+  // is not blocked by React Router's CSRF protection.
 } satisfies Config;
