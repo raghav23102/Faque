@@ -11,6 +11,8 @@ export default function App() {
           rel="stylesheet"
           href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css"
         />
+        <meta name="shopify-api-key" content="dafbfec9f51776f79863a71093d0538a" />
+        <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js" />
         <Meta />
         <Links />
       </head>
