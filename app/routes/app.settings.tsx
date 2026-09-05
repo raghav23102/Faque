@@ -16,7 +16,7 @@ import {
 import { authenticate } from "../shopify.server";
 import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
-import { useLoaderData } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { useState, useCallback } from "react";
 
 export const headers: HeadersFunction = (headersArgs) => {
@@ -45,6 +45,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function Settings() {
   const { shop, subscription, faqCount, questionCount } =
     useLoaderData<typeof loader>();
+  const navigate = useNavigate();
 
   const [saved, setSaved] = useState(false);
   const [defaultDesign, setDefaultDesign] = useState("01");
@@ -99,7 +100,7 @@ export default function Settings() {
                       <Badge tone="success">Active</Badge>
                     </InlineStack>
                   </BlockStack>
-                  <Button url="/app/billing">Manage Plan</Button>
+                  <Button onClick={() => navigate("/app/billing")}>Manage Plan</Button>
                 </InlineStack>
 
                 <Divider />
