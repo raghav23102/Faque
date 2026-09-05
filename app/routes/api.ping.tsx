@@ -1,4 +1,3 @@
-import { json } from "react-router";
 import type { LoaderFunctionArgs } from "react-router";
 import { authenticate } from "../shopify.server";
 
@@ -7,8 +6,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   // can see a session token being sent via the Authorization header.
   try {
     await authenticate.admin(request);
-    return json({ success: true, message: "pong" });
+    return Response.json({ success: true, message: "pong" });
   } catch (error) {
-    return json({ success: false }, { status: 401 });
+    return Response.json({ success: false }, { status: 401 });
   }
 };
