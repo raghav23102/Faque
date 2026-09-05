@@ -74,7 +74,7 @@ export default function CreateFAQ() {
 
   return (
     <Page
-      backAction={{ content: "FAQs", url: "/app/faqs" }}
+      backAction={{ content: "FAQs", onAction: () => navigate("/app/faqs") }}
       title="Create new FAQ"
     >
       <Layout>

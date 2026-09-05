@@ -289,7 +289,7 @@ export default function EditFAQ() {
 
   return (
     <Page
-      backAction={{ content: "FAQs", url: "/app/faqs" }}
+      backAction={{ content: "FAQs", onAction: () => navigate("/app/faqs") }}
       title={faq.name}
       primaryAction={{ content: "Preview", onAction: () => navigate(`/app/preview?faqId=${faq.id}`) }}
       secondaryActions={[{ content: "Add Question", onAction: () => { setIsAdding(true); setError(""); } }]}
