@@ -38,3 +38,6 @@ redirect_urls = [
 url = "https://faque.flamaradigital.online/api/proxy"
 subpath = "faque"
 prefix = "apps"
+
+[access]
+direct_api_access = true
