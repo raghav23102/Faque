@@ -25,10 +25,12 @@ export const headers: HeadersFunction = (headersArgs) => {
 };
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  let session;
+  let session: any;
+  let billing: any;
   try {
     const authResult = await authenticate.admin(request);
     session = authResult.session;
+    billing = (authResult as any).billing;
   } catch (error: any) {
     if (error instanceof Response || error?.status || error?.headers) {
       throw error;

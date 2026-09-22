@@ -11,8 +11,9 @@ export default function App() {
           rel="stylesheet"
           href="https://cdn.shopify.com/static/fonts/inter/v4/styles.css"
         />
-        <meta name="shopify-api-key" content="dafbfec9f51776f79863a71093d0538a" />
-        <script src="https://cdn.shopify.com/shopifycloud/app-bridge.js" />
+        {/* App Bridge is initialized by <AppProvider> in app.tsx with the correct host param.
+            Do NOT load app-bridge.js or set shopify-api-key here — it causes a double-init
+            that targets the wrong postMessage origin and breaks embedded auth. */}
         <Meta />
         <Links />
       </head>
