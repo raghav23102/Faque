@@ -29,9 +29,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   let billing: any;
   try {
     const authResult = await authenticate.admin(request);
+    // Correctly destructure session and billing from the auth result
     session = authResult.session;
-    billing = (authResult as any).billing;
+    billing = authResult.billing;
   } catch (error: any) {
+    // Re-throw Shopify redirect/auth responses as-is
     if (error instanceof Response || error?.status || error?.headers) {
       throw error;
     }
@@ -49,13 +51,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
         orderBy: { updatedAt: "desc" },
       }),
       getSubscription(shopDomain),
+      // Safely check billing status — never let this crash the page
       (async () => {
+        if (!billing) return null;
         try {
-          return await (billing as any).check({
+          return await billing.check({
             plans: ["Simple", "Pro", "Ultimate"],
             isTest: true,
           });
         } catch (e) {
+          console.warn("Billing check failed (non-fatal):", e);
           return null;
         }
       })()

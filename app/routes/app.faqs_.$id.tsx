@@ -353,8 +353,7 @@ export default function EditFAQ() {
                             tone="critical"
                             variant="plain" 
                             loading={isDeletingId === id} 
-                            onClick={(e) => {
-                              e.stopPropagation();
+                            onClick={() => {
                               handleDeleteQuestion(id);
                             }}
                           >
