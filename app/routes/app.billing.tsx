@@ -69,7 +69,7 @@ const PLANS = [
   {
     id: "Simple",
     name: "Simple",
-    price: 29,
+    price: 2.99,
     badge: "Popular",
     color: "#e3f0ff",
     features: [
@@ -87,7 +87,7 @@ const PLANS = [
   {
     id: "Pro",
     name: "Pro",
-    price: 79,
+    price: 7.99,
     badge: "Best Value",
     color: "#f0e6ff",
     features: [
@@ -109,7 +109,7 @@ const PLANS = [
   {
     id: "Ultimate",
     name: "Ultimate",
-    price: 119,
+    price: 9.99,
     badge: "All Features",
     color: "#fff3e0",
     features: [
