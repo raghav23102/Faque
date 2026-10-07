@@ -1,23 +1,21 @@
-// Faque — Interactive JS for all 15 designs
-// Runs after the liquid block fires 'faque:loaded', once the proxied HTML is in the DOM.
+// Faque — Interactive JS for designs that need client-side behaviour.
+// Triggered by the 'faque:loaded' custom event fired from faque-block.liquid
+// AFTER the proxied HTML has been injected into the page.
 (function () {
   "use strict";
 
   function initFaque(container) {
 
-    // ---- Design 05: Category Tabs ----
+    // ── Design 05: Category Tabs ────────────────────────────────────────────
     var d05 = container.querySelector(".faque-d05");
     if (d05) {
-      var tabs = d05.querySelectorAll(".faque-tab-btn");
-      var items = d05.querySelectorAll(".faque-item");
+      var tabs  = d05.querySelectorAll(".faque-tab-btn");
+      var items = d05.querySelectorAll("details.faque-item");
 
       function filterByCategory(cat) {
         items.forEach(function (item) {
-          if (cat === "All" || item.dataset.category === cat) {
-            item.classList.add("visible");
-          } else {
-            item.classList.remove("visible");
-          }
+          var matches = cat === "All" || item.dataset.category === cat;
+          item.classList.toggle("visible", matches);
         });
       }
 
@@ -32,16 +30,16 @@
       });
     }
 
-    // ---- Design 06: Sidebar FAQ ----
+    // ── Design 06: Sidebar FAQ ───────────────────────────────────────────────
     var d06 = container.querySelector(".faque-d06");
     if (d06) {
       var catBtns = d06.querySelectorAll(".faque-cat-btn");
-      var items = d06.querySelectorAll(".faque-item");
+      var items   = d06.querySelectorAll("details.faque-item");
 
       function filterSidebar(cat) {
         items.forEach(function (item) {
-          item.style.display =
-            cat === "All" || item.dataset.category === cat ? "" : "none";
+          var matches = cat === "All" || item.dataset.category === cat;
+          item.style.display = matches ? "" : "none";
         });
       }
 
@@ -56,26 +54,27 @@
       });
     }
 
-    // ---- Design 07: Search FAQ ----
+    // ── Design 07: Search FAQ ────────────────────────────────────────────────
     var d07 = container.querySelector(".faque-d07");
     if (d07) {
       var input = d07.querySelector(".faque-search");
+      var items = d07.querySelectorAll("details.faque-item");
       if (input) {
-        var items = d07.querySelectorAll(".faque-item");
         input.addEventListener("input", function () {
           var query = input.value.toLowerCase().trim();
           items.forEach(function (item) {
-            var text = item.textContent.toLowerCase();
-            item.classList.toggle("hidden", query.length > 0 && !text.includes(query));
+            var text    = item.textContent.toLowerCase();
+            var hidden  = query.length > 0 && !text.includes(query);
+            item.classList.toggle("hidden", hidden);
           });
         });
       }
     }
 
-    // ---- Design 13: Split FAQ ----
+    // ── Design 13: Split FAQ ─────────────────────────────────────────────────
     var d13 = container.querySelector(".faque-d13");
     if (d13) {
-      var qBtns = d13.querySelectorAll(".faque-q-btn");
+      var qBtns       = d13.querySelectorAll(".faque-q-btn");
       var answerPanel = d13.querySelector(".faque-answer-panel");
 
       qBtns.forEach(function (btn) {
@@ -83,23 +82,23 @@
           qBtns.forEach(function (b) { b.classList.remove("active"); });
           btn.classList.add("active");
           if (answerPanel) {
-            answerPanel.querySelector("h3").textContent = btn.dataset.question || "";
-            answerPanel.querySelector("p").textContent = btn.dataset.answer || "";
+            var h3 = answerPanel.querySelector("h3");
+            var p  = answerPanel.querySelector("p");
+            if (h3) h3.textContent = btn.dataset.question || "";
+            if (p)  p.textContent  = btn.dataset.answer   || "";
           }
         });
       });
 
-      // Activate first button by default
+      // Pre-click first button to populate the answer panel
       if (qBtns.length > 0) qBtns[0].click();
     }
   }
 
-  // Listen for the custom event fired by the liquid block after the proxy HTML is injected.
+  // The liquid block fires this event once the fetch + innerHTML is done.
   document.addEventListener("faque:loaded", function (e) {
     var container = e.detail && e.detail.container;
-    if (container) {
-      initFaque(container);
-    }
+    if (container) initFaque(container);
   });
 
 })();
