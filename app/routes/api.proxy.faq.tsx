@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     let settings = {};
     try {
       settings = JSON.parse(faq.settings || "{}");
-    } catch(e) {}
+    } catch (e) { }
 
     const html = renderFaqHTML(faq, settings);
 
@@ -232,17 +232,17 @@ function renderFaqHTML(faq: any, settings: any) {
     inner = `<h2 class="faque-heading">${heading}</h2>` +
       questions.map((q: any) => acc(q)).join("\n");
 
-  // ── 02 Modern Cards ───────────────────────────────────────────────────────
+    // ── 02 Modern Cards ───────────────────────────────────────────────────────
   } else if (designId === "02") {
     inner = `<h2 class="faque-heading">${heading}</h2>` +
       questions.map((q: any) => acc(q)).join("\n");
 
-  // ── 03 Two Column ─────────────────────────────────────────────────────────
+    // ── 03 Two Column ─────────────────────────────────────────────────────────
   } else if (designId === "03") {
     inner = `<h2 class="faque-heading">${heading}</h2>
       <div class="faque-grid">${questions.map((q: any) => acc(q)).join("\n")}</div>`;
 
-  // ── 04 Editorial ─────────────────────────────────────────────────────────
+    // ── 04 Editorial ─────────────────────────────────────────────────────────
   } else if (designId === "04") {
     const items = questions.map((q: any, idx: number) =>
       `<div class="faque-item">
@@ -257,7 +257,7 @@ function renderFaqHTML(faq: any, settings: any) {
     ).join("\n");
     inner = `<h2 class="faque-heading">${heading}</h2>${items}`;
 
-  // ── 05 Category Tabs ──────────────────────────────────────────────────────
+    // ── 05 Category Tabs ──────────────────────────────────────────────────────
   } else if (designId === "05") {
     const tabBar = hasCategories
       ? `<div class="faque-tabs">
@@ -273,7 +273,7 @@ function renderFaqHTML(faq: any, settings: any) {
     ).join("\n");
     inner = `<h2 class="faque-heading">${heading}</h2>${tabBar}${items}`;
 
-  // ── 06 Sidebar FAQ ────────────────────────────────────────────────────────
+    // ── 06 Sidebar FAQ ────────────────────────────────────────────────────────
   } else if (designId === "06") {
     const sidebar = hasCategories
       ? `<div class="faque-sidebar">
@@ -290,7 +290,7 @@ function renderFaqHTML(faq: any, settings: any) {
     inner = `<h2 class="faque-heading">${heading}</h2>
       <div class="faque-layout">${sidebar}<div class="faque-content">${items}</div></div>`;
 
-  // ── 07 Search FAQ ─────────────────────────────────────────────────────────
+    // ── 07 Search FAQ ─────────────────────────────────────────────────────────
   } else if (designId === "07") {
     const items = questions.map((q: any) =>
       `<details class="faque-item">
@@ -304,7 +304,7 @@ function renderFaqHTML(faq: any, settings: any) {
         <input class="faque-search" type="search" placeholder="Search for answers…" />
       </div>${items}`;
 
-  // ── 08 Image + FAQ ────────────────────────────────────────────────────────
+    // ── 08 Image + FAQ ────────────────────────────────────────────────────────
   } else if (designId === "08") {
     const items = questions.map((q: any) => acc(q)).join("\n");
     inner = `<h2 class="faque-heading">${heading}</h2>
@@ -313,17 +313,17 @@ function renderFaqHTML(faq: any, settings: any) {
         <div class="faque-content">${items}</div>
       </div>`;
 
-  // ── 09 Centered Premium ───────────────────────────────────────────────────
+    // ── 09 Centered Premium ───────────────────────────────────────────────────
   } else if (designId === "09") {
     inner = `<h2 class="faque-heading">${heading}</h2>
       <div class="faque-items">${questions.map((q: any) => acc(q)).join("\n")}</div>`;
 
-  // ── 10 Dark FAQ ───────────────────────────────────────────────────────────
+    // ── 10 Dark FAQ ───────────────────────────────────────────────────────────
   } else if (designId === "10") {
     inner = `<h2 class="faque-heading">${heading}</h2>` +
       questions.map((q: any) => acc(q)).join("\n");
 
-  // ── 11 Highlighted Question ───────────────────────────────────────────────
+    // ── 11 Highlighted Question ───────────────────────────────────────────────
   } else if (designId === "11") {
     const items = questions.map((q: any) =>
       `<div class="faque-item">
@@ -338,12 +338,12 @@ function renderFaqHTML(faq: any, settings: any) {
     ).join("\n");
     inner = `<h2 class="faque-heading">${heading}</h2>${items}`;
 
-  // ── 12 Borderless FAQ ─────────────────────────────────────────────────────
+    // ── 12 Borderless FAQ ─────────────────────────────────────────────────────
   } else if (designId === "12") {
     inner = `<h2 class="faque-heading">${heading}</h2>` +
       questions.map((q: any) => acc(q)).join("\n");
 
-  // ── 13 Split FAQ ──────────────────────────────────────────────────────────
+    // ── 13 Split FAQ ──────────────────────────────────────────────────────────
   } else if (designId === "13") {
     const qBtns = questions.map((q: any, idx: number) =>
       `<button class="faque-q-btn${idx === 0 ? " active" : ""}"
@@ -360,7 +360,7 @@ function renderFaqHTML(faq: any, settings: any) {
         </div>
       </div>`;
 
-  // ── 14 Timeline FAQ ───────────────────────────────────────────────────────
+    // ── 14 Timeline FAQ ───────────────────────────────────────────────────────
   } else if (designId === "14") {
     const items = questions.map((q: any) =>
       `<div class="faque-item">
@@ -373,7 +373,7 @@ function renderFaqHTML(faq: any, settings: any) {
     inner = `<h2 class="faque-heading">${heading}</h2>
       <div class="faque-timeline">${items}</div>`;
 
-  // ── 15 Compact FAQ ────────────────────────────────────────────────────────
+    // ── 15 Compact FAQ ────────────────────────────────────────────────────────
   } else if (designId === "15") {
     inner = `<h2 class="faque-heading">${heading}</h2>` +
       questions.map((q: any) => acc(q)).join("\n");
@@ -457,7 +457,7 @@ function renderFaqHTML(faq: any, settings: any) {
   </script>`;
 
   // Embed CSS + scoped root wrapper + Script so it's fully self-contained!
-  return \`\${FAQUE_CSS}<div class="faque-root faque-d\${designId}">\${inner}\${embeddedScript}</div>\`;
+  return `${FAQUE_CSS}<div class="faque-root faque-d${designId}">${inner}${embeddedScript}</div>`;
 }
 
 /** Minimal HTML escape to prevent XSS */

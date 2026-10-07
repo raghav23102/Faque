@@ -340,7 +340,7 @@ export default function EditFAQ() {
                   renderItem={(item) => {
                     const { id, question, answer, category } = item;
                     return (
-                      <ResourceItem id={id} onClick={() => {}}>
+                      <ResourceItem id={id} onClick={() => { }}>
                         <InlineStack align="space-between" blockAlign="start">
                           <div style={{ flex: 1, paddingRight: '16px' }}>
                             <InlineStack align="start" gap="200" blockAlign="center">
@@ -349,10 +349,10 @@ export default function EditFAQ() {
                             </InlineStack>
                             <Text variant="bodyMd" as="p" tone="subdued">{answer}</Text>
                           </div>
-                          <Button 
+                          <Button
                             tone="critical"
-                            variant="plain" 
-                            loading={isDeletingId === id} 
+                            variant="plain"
+                            loading={isDeletingId === id}
                             onClick={() => {
                               handleDeleteQuestion(id);
                             }}
@@ -375,44 +375,44 @@ export default function EditFAQ() {
           <Card>
             <BlockStack gap="300">
               <Text as="h2" variant="headingMd">FAQ Info</Text>
-                <BlockStack gap="100">
-                  <Text as="p" variant="bodySm" tone="subdued">FAQ ID (For Theme Editor)</Text>
-                  <InlineStack gap="200" blockAlign="center">
-                    <Text as="p" fontWeight="regular" tone="subdued">{faq.id}</Text>
-                    <Button 
-                      size="micro" 
-                      onClick={() => {
-                        navigator.clipboard.writeText(faq.id);
-                        shopify.toast.show("ID copied to clipboard!");
-                      }}
-                    >
-                      Copy
-                    </Button>
-                  </InlineStack>
-                </BlockStack>
+              <BlockStack gap="100">
+                <Text as="p" variant="bodySm" tone="subdued">FAQ ID (For Theme Editor)</Text>
+                <InlineStack gap="200" blockAlign="center">
+                  <Text as="p" fontWeight="regular" tone="subdued">{faq.id}</Text>
+                  <Button
+                    size="micro"
+                    onClick={() => {
+                      navigator.clipboard.writeText(faq.id);
+                      shopify.toast.show("ID copied to clipboard!");
+                    }}
+                  >
+                    Copy
+                  </Button>
+                </InlineStack>
+              </BlockStack>
 
+              <BlockStack gap="100">
+                <Text as="p" variant="bodySm" tone="subdued">HEADING</Text>
+                <Text as="p" fontWeight="semibold">{faq.heading}</Text>
+              </BlockStack>
+              {faq.description && (
                 <BlockStack gap="100">
-                  <Text as="p" variant="bodySm" tone="subdued">HEADING</Text>
-                  <Text as="p" fontWeight="semibold">{faq.heading}</Text>
+                  <Text as="p" variant="bodySm" tone="subdued">DESCRIPTION</Text>
+                  <Text as="p">{faq.description}</Text>
                 </BlockStack>
-                {faq.description && (
-                  <BlockStack gap="100">
-                    <Text as="p" variant="bodySm" tone="subdued">DESCRIPTION</Text>
-                    <Text as="p">{faq.description}</Text>
-                  </BlockStack>
-                )}
+              )}
 
               {faq.designId === "08" && (
                 <>
                   <Divider />
                   <BlockStack gap="200">
                     <Text as="h3" variant="headingSm">Design Settings</Text>
-                    <TextField 
-                      label="Image URL" 
+                    <TextField
+                      label="Image URL"
                       value={(() => {
-                        try { return JSON.parse(faq.settings || "{}").imageUrl || ""; } 
+                        try { return JSON.parse(faq.settings || "{}").imageUrl || ""; }
                         catch { return ""; }
-                      })()} 
+                      })()}
                       onChange={async (val) => {
                         setIsChangingDesign(true);
                         try {
@@ -424,13 +424,13 @@ export default function EditFAQ() {
                           });
                           if (!response.ok) throw new Error("Failed to save image");
                           revalidator.revalidate();
-                        } catch(e) {
+                        } catch (e) {
                           console.error(e);
                         } finally {
                           setIsChangingDesign(false);
                         }
                       }}
-                      autoComplete="off" 
+                      autoComplete="off"
                       placeholder="https://your-store.com/image.jpg"
                       helpText="Provide a URL for the image to display next to your FAQ."
                     />
