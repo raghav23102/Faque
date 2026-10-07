@@ -389,9 +389,9 @@ function renderFaqHTML(faq: any, settings: any) {
       var container = document.currentScript.parentElement;
       
       // Design 05: Category Tabs
-      var d05Tabs = container.querySelectorAll(".faque-d05 .faque-tab-btn");
+      var d05Tabs = container.querySelectorAll(".faque-tab-btn");
       if (d05Tabs.length > 0) {
-        var items = container.querySelectorAll(".faque-d05 details.faque-item");
+        var items = container.querySelectorAll("details.faque-item");
         d05Tabs.forEach(function(tab) {
           tab.addEventListener("click", function() {
             d05Tabs.forEach(function(t) { t.classList.remove("active"); });
@@ -407,9 +407,9 @@ function renderFaqHTML(faq: any, settings: any) {
       }
 
       // Design 06: Sidebar FAQ
-      var d06Tabs = container.querySelectorAll(".faque-d06 .faque-cat-btn");
+      var d06Tabs = container.querySelectorAll(".faque-cat-btn");
       if (d06Tabs.length > 0) {
-        var items = container.querySelectorAll(".faque-d06 details.faque-item");
+        var items = container.querySelectorAll("details.faque-item");
         d06Tabs.forEach(function(tab) {
           tab.addEventListener("click", function() {
             d06Tabs.forEach(function(t) { t.classList.remove("active"); });
@@ -424,9 +424,9 @@ function renderFaqHTML(faq: any, settings: any) {
       }
 
       // Design 07: Search FAQ
-      var searchInput = container.querySelector(".faque-d07 .faque-search");
+      var searchInput = container.querySelector(".faque-search");
       if (searchInput) {
-        var items = container.querySelectorAll(".faque-d07 details.faque-item");
+        var items = container.querySelectorAll("details.faque-item");
         searchInput.addEventListener("input", function() {
           var query = this.value.toLowerCase().trim();
           items.forEach(function(item) {
@@ -437,9 +437,9 @@ function renderFaqHTML(faq: any, settings: any) {
       }
 
       // Design 13: Split FAQ
-      var d13Btns = container.querySelectorAll(".faque-d13 .faque-q-btn");
+      var d13Btns = container.querySelectorAll(".faque-q-btn");
       if (d13Btns.length > 0) {
-        var answerPanel = container.querySelector(".faque-d13 .faque-answer-panel");
+        var answerPanel = container.querySelector(".faque-answer-panel");
         var h3 = answerPanel ? answerPanel.querySelector("h3") : null;
         var p = answerPanel ? answerPanel.querySelector("p") : null;
         
@@ -448,7 +448,6 @@ function renderFaqHTML(faq: any, settings: any) {
             d13Btns.forEach(function(b) { b.classList.remove("active"); });
             btn.classList.add("active");
             if (h3) h3.textContent = btn.dataset.question || "";
-            // Use innerHTML because the answer is escaped HTML
             if (p) p.innerHTML = btn.dataset.answer || ""; 
           });
         });
