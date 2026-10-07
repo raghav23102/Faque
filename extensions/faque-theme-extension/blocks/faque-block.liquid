@@ -28,6 +28,16 @@
       })
       .then(html => {
         container.innerHTML = html;
+        
+        // Execute any script tags that came with the HTML (innerHTML blocks script execution)
+        const scripts = container.querySelectorAll('script');
+        scripts.forEach(oldScript => {
+          const newScript = document.createElement('script');
+          Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+          newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+
         container.dataset.faqueLoaded = 'true';
 
         // If faque.js is already loaded, call it directly
