@@ -95,10 +95,23 @@
     }
   }
 
+  window.faqueInit = initFaque;
+
+  // In case the script loads AFTER the block has already fetched its HTML
+  document.querySelectorAll(".faque-app-proxy-container").forEach(function (container) {
+    if (container.dataset.faqueLoaded === "true" && !container.dataset.faqueInitialized) {
+      container.dataset.faqueInitialized = "true";
+      initFaque(container);
+    }
+  });
+
   // The liquid block fires this event once the fetch + innerHTML is done.
   document.addEventListener("faque:loaded", function (e) {
     var container = e.detail && e.detail.container;
-    if (container) initFaque(container);
+    if (container && !container.dataset.faqueInitialized) {
+      container.dataset.faqueInitialized = "true";
+      initFaque(container);
+    }
   });
 
 })();

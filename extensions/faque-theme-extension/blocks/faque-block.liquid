@@ -28,10 +28,18 @@
       })
       .then(html => {
         container.innerHTML = html;
+        container.dataset.faqueLoaded = 'true';
 
-        // Dispatch a custom event so faque.js can wire up interactive behaviour
-        // after the async HTML is in the DOM (DOMContentLoaded fires too early).
-        document.dispatchEvent(new CustomEvent('faque:loaded', { detail: { container: container } }));
+        // If faque.js is already loaded, call it directly
+        if (typeof window.faqueInit === 'function') {
+          if (!container.dataset.faqueInitialized) {
+            container.dataset.faqueInitialized = 'true';
+            window.faqueInit(container);
+          }
+        } else {
+          // Otherwise dispatch event for faque.js to pick up when it loads
+          document.dispatchEvent(new CustomEvent('faque:loaded', { detail: { container: container } }));
+        }
       })
       .catch(err => {
         console.error('Faque App Error:', err);
