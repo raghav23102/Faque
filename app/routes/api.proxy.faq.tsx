@@ -52,169 +52,176 @@ function renderFaqHTML(faq: any, settings: any) {
   const designId = faq.designId;
   const questions = faq.questions || [];
   const imageUrl = settings.imageUrl || "https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png";
-  
-  let html = `<div class="faque-container design-${designId}" style="width: 100%; box-sizing: border-box; font-family: sans-serif;">`;
-  html += `<h2 style="margin-bottom: 24px; font-size: 24px;">${faq.heading}</h2>`;
-  
-  const categories = Array.from(new Set(questions.map((q: any) => q.category).filter(Boolean)));
+
+  const categories: string[] = Array.from(new Set(questions.map((q: any) => q.category).filter(Boolean)));
   const hasCategories = categories.length > 0;
 
-  // 05: Category Tabs
-  if (designId === "05") {
+  // Helper: render a standard <details>/<summary> accordion item
+  const accordionItem = (q: any, extraClasses = "", extraAttrs = "") =>
+    `<details class="faque-item ${extraClasses}" ${extraAttrs}>
+      <summary>${escapeHtml(q.question)}</summary>
+      <div class="faque-answer">${escapeHtml(q.answer)}</div>
+    </details>`;
+
+  let inner = "";
+
+  if (designId === "01") {
+    // Minimal Accordion — uses <details>/<summary>, CSS handles +/−
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
+  } else if (designId === "02") {
+    // Modern Cards — card wrapper around each <details>
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
+  } else if (designId === "03") {
+    // Two Column — items inside a grid wrapper
+    const items = questions.map((q: any) => accordionItem(q)).join("\n");
+    inner = `<div class="faque-grid">${items}</div>`;
+
+  } else if (designId === "04") {
+    // Editorial — numbered layout
+    inner = questions.map((q: any, idx: number) =>
+      `<div class="faque-item">
+        <div class="faque-item-num">${String(idx + 1).padStart(2, "0")}</div>
+        <div class="faque-item-body">
+          <details>
+            <summary>${escapeHtml(q.question)}</summary>
+            <div class="faque-answer">${escapeHtml(q.answer)}</div>
+          </details>
+        </div>
+      </div>`
+    ).join("\n");
+
+  } else if (designId === "05") {
+    // Category Tabs — tab bar + filterable accordion items
+    let tabs = "";
     if (hasCategories) {
-      html += `<div class="faque-tabs" style="display: flex; gap: 8px; margin-bottom: 24px; overflow-x: auto;">`;
-      html += `<span class="faque-tab active" data-category="All" style="padding: 6px 16px; background: #000; color: #fff; border-radius: 20px; font-size: 14px; cursor: pointer;">All</span>`;
-      for (const cat of categories) {
-        html += `<span class="faque-tab" data-category="${cat}" style="padding: 6px 16px; background: #f4f6f8; color: #333; border-radius: 20px; font-size: 14px; cursor: pointer;">${cat}</span>`;
-      }
-      html += `</div>`;
+      tabs = `<div class="faque-tabs">
+        <button class="faque-tab-btn active" data-category="All">All</button>
+        ${categories.map(c => `<button class="faque-tab-btn" data-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}
+      </div>`;
     }
-    html += `<div class="faque-list" style="display: flex; flex-direction: column; gap: 16px;">`;
-    for (let i = 0; i < questions.length; i++) {
-      const qCat = questions[i].category || "";
-      html += `
-        <div class="faque-item" data-category="${qCat}" style="padding: 16px 0; border-bottom: 1px solid #e1e3e5; cursor: pointer;">
-          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-            ${questions[i].question} <span class="faque-icon">+</span>
-          </div>
-          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
-            ${questions[i].answer}
-          </div>
-        </div>
-      `;
-    }
-    html += `</div>`;
-  }
-  // 06: Sidebar FAQ
-  else if (designId === "06") {
-    html += `<div style="display: flex; gap: 48px; flex-wrap: wrap;">`;
+    const items = questions.map((q: any) =>
+      `<details class="faque-item visible" data-category="${escapeHtml(q.category || "")}">
+        <summary>${escapeHtml(q.question)}</summary>
+        <div class="faque-answer">${escapeHtml(q.answer)}</div>
+      </details>`
+    ).join("\n");
+    inner = tabs + items;
+
+  } else if (designId === "06") {
+    // Sidebar FAQ — sidebar categories + main content
+    let sidebar = "";
     if (hasCategories) {
-      html += `<div style="width: 250px; flex-shrink: 0; border-right: 1px solid #eee; padding-right: 24px;">`;
-      html += `<div style="font-weight: bold; margin-bottom: 16px;">Categories</div>`;
-      html += `<div class="faque-tab active" data-category="All" style="color: #005bd3; font-weight: bold; margin-bottom: 12px; cursor: pointer;">All</div>`;
-      for (const cat of categories) {
-        html += `<div class="faque-tab" data-category="${cat}" style="color: #555; margin-bottom: 12px; cursor: pointer;">${cat}</div>`;
-      }
-      html += `</div>`;
+      sidebar = `<div class="faque-sidebar">
+        <button class="faque-cat-btn active" data-category="All">All</button>
+        ${categories.map(c => `<button class="faque-cat-btn" data-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("")}
+      </div>`;
     }
-    html += `<div class="faque-list" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 16px;">`;
-    for (let i = 0; i < questions.length; i++) {
-      const qCat = questions[i].category || "";
-      html += `
-        <div class="faque-item" data-category="${qCat}" style="padding-bottom: 16px; border-bottom: 1px solid #eee; cursor: pointer;">
-          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-            ${questions[i].question}
-          </div>
-          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
-            ${questions[i].answer}
-          </div>
+    const items = questions.map((q: any) =>
+      `<details class="faque-item" data-category="${escapeHtml(q.category || "")}">
+        <summary>${escapeHtml(q.question)}</summary>
+        <div class="faque-answer">${escapeHtml(q.answer)}</div>
+      </details>`
+    ).join("\n");
+    inner = `<div class="faque-layout">${sidebar}<div class="faque-content">${items}</div></div>`;
+
+  } else if (designId === "07") {
+    // Search FAQ — search input + hidden-by-filter items
+    const searchBox = `<div class="faque-search-wrap">
+      <span class="faque-search-icon">🔍</span>
+      <input class="faque-search" type="search" placeholder="Search for answers..." />
+    </div>`;
+    const items = questions.map((q: any) =>
+      `<details class="faque-item">
+        <summary>${escapeHtml(q.question)}</summary>
+        <div class="faque-answer">${escapeHtml(q.answer)}</div>
+      </details>`
+    ).join("\n");
+    inner = searchBox + items;
+
+  } else if (designId === "08") {
+    // Image + FAQ — image panel beside accordion
+    const items = questions.map((q: any) => accordionItem(q)).join("\n");
+    inner = `<div class="faque-layout">
+      <div class="faque-img-wrap"><img src="${escapeHtml(imageUrl)}" alt="FAQ image" /></div>
+      <div class="faque-content">${items}</div>
+    </div>`;
+
+  } else if (designId === "09") {
+    // Centered Premium — bordered accordion, centered heading handled by CSS
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
+  } else if (designId === "10") {
+    // Dark FAQ — uses same accordion structure, CSS applies dark theme
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
+  } else if (designId === "11") {
+    // Highlighted Question — icon + question
+    inner = questions.map((q: any, idx: number) =>
+      `<div class="faque-item">
+        <div class="faque-item-icon">Q</div>
+        <div class="faque-item details">
+          <details>
+            <summary>${escapeHtml(q.question)}</summary>
+            <div class="faque-answer">${escapeHtml(q.answer)}</div>
+          </details>
         </div>
-      `;
-    }
-    html += `</div></div>`;
-  }
-  // 08: Image FAQ
-  else if (designId === "08") {
-    html += `<div style="display: flex; gap: 32px; flex-wrap: wrap;">`;
-    html += `<div style="flex: 1; min-width: 300px;"><img src="${imageUrl}" style="width: 100%; border-radius: 8px; object-fit: cover;" /></div>`;
-    html += `<div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; gap: 16px;">`;
-    
-    for (let i = 0; i < questions.length; i++) {
-      html += `
-        <div class="faque-item" style="padding: 16px 0; border-bottom: 1px solid #e1e3e5; cursor: pointer;">
-          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-            ${questions[i].question} <span>+</span>
-          </div>
-          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
-            ${questions[i].answer}
-          </div>
-        </div>
-      `;
-    }
-    html += `</div></div>`;
+      </div>`
+    ).join("\n");
+
+  } else if (designId === "12") {
+    // Borderless FAQ
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
+  } else if (designId === "13") {
+    // Split FAQ — question list on left, answer panel on right
+    const qBtns = questions.map((q: any, idx: number) =>
+      `<button class="faque-q-btn${idx === 0 ? " active" : ""}" data-question="${escapeHtml(q.question)}" data-answer="${escapeHtml(q.answer)}">${escapeHtml(q.question)}</button>`
+    ).join("\n");
+    const firstQ = questions[0] || { question: "", answer: "" };
+    inner = `<div class="faque-layout">
+      <div class="faque-questions-list">${qBtns}</div>
+      <div class="faque-answer-panel">
+        <h3>${escapeHtml(firstQ.question)}</h3>
+        <p>${escapeHtml(firstQ.answer)}</p>
+      </div>
+    </div>`;
+
+  } else if (designId === "14") {
+    // Timeline FAQ
+    const items = questions.map((q: any) =>
+      `<div class="faque-item">
+        <details>
+          <summary>${escapeHtml(q.question)}</summary>
+          <div class="faque-answer">${escapeHtml(q.answer)}</div>
+        </details>
+      </div>`
+    ).join("\n");
+    inner = `<div class="faque-timeline">${items}</div>`;
+
+  } else if (designId === "15") {
+    // Compact FAQ
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
+
   } else {
-    // Basic fallback for other designs (you can expand this to all 15 just like React later)
-    html += `<div class="faque-list" style="display: flex; flex-direction: column; gap: 16px;">`;
-    for (let i = 0; i < questions.length; i++) {
-      html += `
-        <div class="faque-item" style="padding: 16px 0; border-bottom: 1px solid #e1e3e5; cursor: pointer;">
-          <div class="faque-q" style="font-weight: bold; font-size: 16px; margin-bottom: 10px; display: flex; justify-content: space-between;">
-            ${questions[i].question} <span class="faque-icon">+</span>
-          </div>
-          <div class="faque-a" style="display: none; color: #4a4a4a; font-size: 15px; line-height: 1.6;">
-            ${questions[i].answer}
-          </div>
-        </div>
-      `;
-    }
-    html += `</div>`;
+    // Generic fallback
+    inner = questions.map((q: any) => accordionItem(q)).join("\n");
   }
-  
-  html += `</div>`;
-  
-  // Accordion & Category script
-  html += `
-    <script>
-      (function() {
-        const container = document.currentScript.parentElement;
-        const items = container.querySelectorAll('.faque-item');
-        
-        // Accordion Logic
-        items.forEach(item => {
-          item.addEventListener('click', () => {
-            const answer = item.querySelector('.faque-a');
-            const icon = item.querySelector('.faque-icon');
-            if (answer.style.display === 'none' || answer.style.display === '') {
-              answer.style.display = 'block';
-              if(icon) icon.innerText = '-';
-            } else {
-              answer.style.display = 'none';
-              if(icon) icon.innerText = '+';
-            }
-          });
-        });
 
-        // Category Tab Logic
-        const tabs = container.querySelectorAll('.faque-tab');
-        if (tabs.length > 0) {
-          tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-              const category = tab.getAttribute('data-category');
-              
-              // Update active tab style
-              tabs.forEach(t => {
-                if (container.classList.contains('design-05')) {
-                  t.style.background = '#f4f6f8';
-                  t.style.color = '#333';
-                } else if (container.classList.contains('design-06')) {
-                  t.style.color = '#555';
-                  t.style.fontWeight = 'normal';
-                }
-              });
+  // Wrap with the correct .faque-dXX class that faque.css targets
+  return `<div class="faque-d${designId}">${
+    `<h2 class="faque-heading">${escapeHtml(faq.heading)}</h2>` + inner
+  }</div>`;
+}
 
-              if (container.classList.contains('design-05')) {
-                tab.style.background = '#000';
-                tab.style.color = '#fff';
-              } else if (container.classList.contains('design-06')) {
-                tab.style.color = '#005bd3';
-                tab.style.fontWeight = 'bold';
-              }
-
-              // Filter items
-              items.forEach(item => {
-                const itemCat = item.getAttribute('data-category');
-                if (category === 'All' || itemCat === category) {
-                  item.style.display = 'block';
-                } else {
-                  item.style.display = 'none';
-                }
-              });
-            });
-          });
-        }
-      })();
-    </script>
-  `;
-  
-  return html;
+/** Escape HTML special chars to prevent XSS in rendered storefront HTML */
+function escapeHtml(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
 }

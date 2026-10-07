@@ -28,15 +28,10 @@
       })
       .then(html => {
         container.innerHTML = html;
-        
-        // We must re-execute any scripts returned by the proxy because innerHTML doesn't execute script tags
-        const scripts = container.querySelectorAll('script');
-        scripts.forEach(oldScript => {
-          const newScript = document.createElement('script');
-          Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-          newScript.appendChild(document.createTextNode(oldScript.innerHTML));
-          oldScript.parentNode.replaceChild(newScript, oldScript);
-        });
+
+        // Dispatch a custom event so faque.js can wire up interactive behaviour
+        // after the async HTML is in the DOM (DOMContentLoaded fires too early).
+        document.dispatchEvent(new CustomEvent('faque:loaded', { detail: { container: container } }));
       })
       .catch(err => {
         console.error('Faque App Error:', err);
